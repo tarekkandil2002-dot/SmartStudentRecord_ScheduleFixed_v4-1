@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>سجل الطلاب الذكي - الإصدار 9.9</title>
+    <title>سجل الطلاب الذكي - الإصدار 10.1</title>
 
     <meta name="theme-color" content="#1d4ed8">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -695,7 +695,7 @@
             .form-grid { grid-template-columns: 1fr; }
         }
 
-        /* ===== الإصدار 9.9 — اللوحة المختصرة التلقائية + الشيت الأساسي الكبير ===== */
+        /* ===== الإصدار 10.1 — اللوحة المختصرة التلقائية + الشيت الأساسي الكبير ===== */
         .auto-dashboard {
             background: #fff;
             border: 1px solid #dbeafe;
@@ -786,7 +786,7 @@
         }
 
 
-        /* ===== الإصدار 9.9 — لوحة حصص اليوم + النظام اليومي السريع ===== */
+        /* ===== الإصدار 10.1 — لوحة حصص اليوم + النظام اليومي السريع ===== */
         .today-panel {
             background: linear-gradient(135deg, #fff7ed 0%, #ffffff 55%, #eff6ff 100%);
             border: 2px solid #93c5fd;
@@ -1025,7 +1025,7 @@
         }
 
 
-        /* ===== الإصدار 9.9 — التصميم الزجاجي الفاخر (Glassmorphism UI) ===== */
+        /* ===== الإصدار 10.1 — التصميم الزجاجي الفاخر (Glassmorphism UI) ===== */
         body {
             background:
                 radial-gradient(circle at 12% 14%, rgba(56, 189, 248, 0.32) 0%, transparent 42%),
@@ -1241,7 +1241,7 @@
         }
 
 
-        /* ===== الإصدار 9.9 — خانات (دفع / ما دفعش) بجانب تاريخ الدفع الشهري ===== */
+        /* ===== الإصدار 10.1 — خانات (دفع / ما دفعش) بجانب تاريخ الدفع الشهري ===== */
         .mp-date-status-row {
             grid-column: 1 / -1;
             display: grid;
@@ -1301,7 +1301,7 @@
         }
 
 
-        /* ===== الإصدار 9.9 — شريط الاسم المختصر القابل للتعديل ===== */
+        /* ===== الإصدار 10.1 — شريط الاسم المختصر القابل للتعديل ===== */
         .teacher-name-bar {
             background: rgba(255, 255, 255, 0.68);
             backdrop-filter: blur(18px) saturate(165%);
@@ -1347,7 +1347,7 @@
         }
 
 
-        /* ===== الإصدار 9.9 — ترتيب الأيقونات والأزرار جنب بعض بشكل متناسق ===== */
+        /* ===== الإصدار 10.1 — ترتيب الأيقونات والأزرار جنب بعض بشكل متناسق ===== */
         .navbar {
             padding: 10px 16px;
             gap: 10px;
@@ -1463,7 +1463,7 @@
         }
 
 
-        /* ===== الإصدار 9.9 — صف واحد متناسق للأيقونات السبع في أعلى الشاشة ===== */
+        /* ===== الإصدار 10.1 — صف واحد متناسق للأيقونات السبع في أعلى الشاشة ===== */
         .nav-actions {
             display: grid !important;
             grid-template-columns: repeat(7, minmax(0, 1fr));
@@ -1524,7 +1524,7 @@
         }
 
 
-        /* ===== الإصدار 9.9 — العنوان والإصدار في المنتصف + 6 أيقونات (3 فوق و 3 تحت) ===== */
+        /* ===== الإصدار 10.1 — العنوان والإصدار في المنتصف + 6 أيقونات (3 فوق و 3 تحت) ===== */
         .navbar {
             flex-direction: column !important;
             align-items: center !important;
@@ -1589,7 +1589,7 @@
         }
 
 
-        /* ===== الإصدار 9.9 — الهيدر النظيف + القائمة الجانبية بالضغط على اللوجو ===== */
+        /* ===== الإصدار 10.1 — الهيدر النظيف + القائمة الجانبية بالضغط على اللوجو ===== */
         .navbar.navbar-v99 {
             flex-direction: row !important;
             align-items: center !important;
@@ -1784,6 +1784,29 @@
             margin: 4px 0;
         }
 
+
+        /* ===== الإصدار 10.1 — صفحة المجموعات وزر إضافة مجموعة في الوسط ===== */
+        .groups-view-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+        .add-group-center-wrap {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 6px 0 22px;
+        }
+        .add-group-center-btn {
+            padding: 13px 28px !important;
+            font-size: 16px !important;
+            border-radius: 14px !important;
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.28) !important;
+        }
+
     </style>
 </head>
 <body>
@@ -1795,7 +1818,7 @@
         </button>
         <div class="brand-box-v99">
             <h1>سجل الطلاب الذكي</h1>
-            <span class="version-pill">الإصدار 9.9</span>
+            <span class="version-pill">الإصدار 10.1</span>
         </div>
         <div style="width:46px;" aria-hidden="true"></div>
         <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
@@ -1815,9 +1838,9 @@
             <button type="button" class="side-close-btn" onclick="closeSideMenu()" aria-label="إغلاق">&times;</button>
         </div>
         <div class="side-menu-items">
-            <button type="button" class="side-item item-blue" onclick="selectSideMenuItem(() => openMasterSheet())">
-                <span class="side-ico">📊</span>
-                <span class="side-txt">الشيت الأساسي</span>
+            <button type="button" class="side-item item-blue" onclick="selectSideMenuItem(() => openGroupsView())">
+                <span class="side-ico">📚</span>
+                <span class="side-txt">المجموعات</span>
             </button>
             <button type="button" class="side-item item-red" onclick="selectSideMenuItem(() => openTodayModal())">
                 <span class="side-ico">🔔</span>
@@ -1887,18 +1910,25 @@
                 <div id="searchResults" class="search-dropdown"></div>
             </div>
 
-            <div class="section-bar">
-                <h2>مجموعاتي الدراسية</h2>
-                <button class="btn btn-primary" onclick="openGroupFormModal()">➕ إضافة مجموعة جديدة</button>
-            </div>
+        </section>
 
+        <!-- ===== Groups View (صفحة المجموعات) ===== -->
+        <section id="groupsView" style="display:none;">
+            <div class="groups-view-header">
+                <button class="btn btn-ghost" onclick="showDashboard()">🔙 العودة للرئيسية</button>
+                <h2 style="margin:0; font-size:22px; font-weight:900; color:var(--dark);">📚 المجموعات الدراسية</h2>
+                <div style="width:90px;" aria-hidden="true"></div>
+            </div>
+            <div class="add-group-center-wrap">
+                <button class="btn btn-primary add-group-center-btn" onclick="openGroupFormModal()">➕ إضافة مجموعة جديدة</button>
+            </div>
             <div id="groupsContainer" class="groups-grid"></div>
         </section>
 
         <!-- ===== Group Details View ===== -->
         <section id="groupView">
             <div class="group-top">
-                <button class="btn btn-ghost" onclick="showDashboard()">🔙 العودة للمجموعات</button>
+                <button class="btn btn-ghost" onclick="openGroupsView()">🔙 العودة للمجموعات</button>
                 <div class="group-heading">
                     <h2 id="currentGroupTitle"></h2>
                     <div class="stats-pills">
@@ -2316,7 +2346,7 @@
 
     <script>
         /* =====================================================================
-           سجل الطلاب الذكي - الإصدار 9.9 (إعادة هيكلة كاملة + توافق تام مع البيانات)
+           سجل الطلاب الذكي - الإصدار 10.1 (إعادة هيكلة كاملة + توافق تام مع البيانات)
            ===================================================================== */
         const WEEK_DAYS = ['السبت', 'الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'];
         const MONTHLY_LIMIT = 4;
@@ -2647,6 +2677,8 @@
             activeGroupId = null;
             document.getElementById('dashboardView').style.display = 'block';
             document.getElementById('groupView').style.display = 'none';
+            const gv = document.getElementById('groupsView');
+            if (gv) gv.style.display = 'none';
             const msView = document.getElementById('masterSheetView');
             if (msView) msView.style.display = 'none';
             renderTeacherName();
@@ -2791,7 +2823,9 @@
 
             saveStorage();
             closeModal('groupFormModal');
+            const wasInGroupsView = document.getElementById('groupsView') && document.getElementById('groupsView').style.display === 'block';
             if (activeGroupId) openGroup(activeGroupId);
+            else if (wasInGroupsView) openGroupsView();
             else renderDashboard();
         }
 
@@ -2802,7 +2836,9 @@
             groups = groups.filter(x => x.id !== groupId);
             students = students.filter(s => s.groupId !== groupId);
             saveStorage();
-            renderDashboard();
+            const wasInGroupsView = document.getElementById('groupsView') && document.getElementById('groupsView').style.display === 'block';
+            if (wasInGroupsView) openGroupsView();
+            else renderDashboard();
         }
 
         /* ===== Unified Weekly Schedule Modal ===== */
@@ -2904,6 +2940,8 @@
 
             document.getElementById('dashboardView').style.display = 'none';
             document.getElementById('groupView').style.display = 'block';
+            const gv = document.getElementById('groupsView');
+            if (gv) gv.style.display = 'none';
             const msView = document.getElementById('masterSheetView');
             if (msView) msView.style.display = 'none';
             document.getElementById('reportBox').style.display = 'none';
@@ -3871,7 +3909,7 @@
             return {
                 format: BACKUP_FORMAT,
                 backupVersion: 3,
-                appVersion: '9.9',
+                appVersion: '10.1',
                 createdAt: new Date().toISOString(),
                 teacherName: getTeacherName(),
                 groups,
@@ -3949,7 +3987,7 @@
             }
         });
 
-        /* ===== اللوحة المختصرة التلقائية + الشيت الأساسي الكبير (الإصدار 9.9) ===== */
+        /* ===== اللوحة المختصرة التلقائية + الشيت الأساسي الكبير (الإصدار 10.1) ===== */
         function getStudentPaidTotal(student, group) {
             const fee = group ? (Number(group.fee) || 0) : 0;
             let total = 0;
@@ -4024,6 +4062,8 @@
             activeGroupId = null;
             document.getElementById('dashboardView').style.display = 'none';
             document.getElementById('groupView').style.display = 'none';
+            const gv = document.getElementById('groupsView');
+            if (gv) gv.style.display = 'none';
             document.getElementById('masterSheetView').style.display = 'block';
 
             const groupSelect = document.getElementById('msGroupFilter');
@@ -4190,7 +4230,7 @@
             setTimeout(() => URL.revokeObjectURL(url), 1500);
         }
 
-        /* ===== لوحة حصص اليوم + النظام اليومي السريع (الإصدار 9.9) ===== */
+        /* ===== لوحة حصص اليوم + النظام اليومي السريع (الإصدار 10.1) ===== */
         function renderTodayPanel() {
             const pill = document.getElementById('todayPanelDatePill');
             const box = document.getElementById('todayPanelContent');
@@ -4210,7 +4250,7 @@
             if (!todaysGroups.length) {
                 box.innerHTML = `<div class="today-empty-box">
                     لا توجد مجموعات مجدولة ليوم <strong>${todayName}</strong> 🏖️<br>
-                    <small style="color:#64748b;">يمكنك الضغط على زر «⚡ حضور اليوم» في أي مجموعة بالأسفل لفتح النظام اليومي لها فوراً.</small>
+                    <small style="color:#64748b;">يمكنك فتح <a href="javascript:void(0)" onclick="openGroupsView()" style="color:var(--primary);font-weight:800;text-decoration:underline;">📚 صفحة المجموعات</a> من القائمة الجانبية لاختيار أي مجموعة.</small>
                 </div>`;
                 return;
             }
@@ -4340,7 +4380,7 @@
             }).join('');
         }
 
-        /* ===== الاسم القابل للتعديل (الإصدار 9.9) ===== */
+        /* ===== الاسم القابل للتعديل (الإصدار 10.1) ===== */
         const TEACHER_NAME_KEY = 'teacher_name_v1';
         const DEFAULT_TEACHER_NAME = 'Mr. Tarek Ibrahim';
 
@@ -4390,7 +4430,7 @@
             toggleEditTeacherName(false);
         }
 
-        /* ===== القائمة الجانبية بالضغط على اللوجو (الإصدار 9.9) ===== */
+        /* ===== القائمة الجانبية بالضغط على اللوجو (الإصدار 10.1) ===== */
         function toggleSideMenu() {
             const drawer = document.getElementById('sideMenuDrawer');
             const backdrop = document.getElementById('sideMenuBackdrop');
@@ -4419,6 +4459,19 @@
         document.addEventListener('keydown', e => {
             if (e.key === 'Escape') closeSideMenu();
         });
+
+        /* ===== فتح صفحة المجموعات (الإصدار 10.1) ===== */
+        function openGroupsView() {
+            activeGroupId = null;
+            renderDashboard();
+            document.getElementById('dashboardView').style.display = 'none';
+            document.getElementById('groupView').style.display = 'none';
+            const msView = document.getElementById('masterSheetView');
+            if (msView) msView.style.display = 'none';
+            const gv = document.getElementById('groupsView');
+            if (gv) gv.style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
         window.onload = () => {
             migrateAndNormalizeData();
