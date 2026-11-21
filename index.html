@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>سجل الطلاب الذكي - الإصدار 9.5</title>
+    <title>سجل الطلاب الذكي - الإصدار 9.6</title>
 
     <meta name="theme-color" content="#1d4ed8">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -695,7 +695,7 @@
             .form-grid { grid-template-columns: 1fr; }
         }
 
-        /* ===== الإصدار 9.5 — اللوحة المختصرة التلقائية + الشيت الأساسي الكبير ===== */
+        /* ===== الإصدار 9.6 — اللوحة المختصرة التلقائية + الشيت الأساسي الكبير ===== */
         .auto-dashboard {
             background: #fff;
             border: 1px solid #dbeafe;
@@ -786,7 +786,7 @@
         }
 
 
-        /* ===== الإصدار 9.5 — لوحة حصص اليوم + النظام اليومي السريع ===== */
+        /* ===== الإصدار 9.6 — لوحة حصص اليوم + النظام اليومي السريع ===== */
         .today-panel {
             background: linear-gradient(135deg, #fff7ed 0%, #ffffff 55%, #eff6ff 100%);
             border: 2px solid #93c5fd;
@@ -1025,7 +1025,7 @@
         }
 
 
-        /* ===== الإصدار 9.5 — التصميم الزجاجي الفاخر (Glassmorphism UI) ===== */
+        /* ===== الإصدار 9.6 — التصميم الزجاجي الفاخر (Glassmorphism UI) ===== */
         body {
             background:
                 radial-gradient(circle at 12% 14%, rgba(56, 189, 248, 0.32) 0%, transparent 42%),
@@ -1241,7 +1241,7 @@
         }
 
 
-        /* ===== الإصدار 9.5 — خانات (دفع / ما دفعش) بجانب تاريخ الدفع الشهري ===== */
+        /* ===== الإصدار 9.6 — خانات (دفع / ما دفعش) بجانب تاريخ الدفع الشهري ===== */
         .mp-date-status-row {
             grid-column: 1 / -1;
             display: grid;
@@ -1301,7 +1301,7 @@
         }
 
 
-        /* ===== الإصدار 9.5 — شريط الاسم المختصر القابل للتعديل ===== */
+        /* ===== الإصدار 9.6 — شريط الاسم المختصر القابل للتعديل ===== */
         .teacher-name-bar {
             background: rgba(255, 255, 255, 0.68);
             backdrop-filter: blur(18px) saturate(165%);
@@ -1346,6 +1346,122 @@
             min-width: 180px;
         }
 
+
+        /* ===== الإصدار 9.6 — ترتيب الأيقونات والأزرار جنب بعض بشكل متناسق ===== */
+        .navbar {
+            padding: 10px 16px;
+            gap: 10px;
+        }
+        .nav-actions {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            gap: 7px;
+            align-items: center;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            padding: 2px 0;
+        }
+        .nav-actions::-webkit-scrollbar { display: none; }
+        .btn-nav {
+            flex: 0 0 auto !important;
+            white-space: nowrap;
+            border-radius: 12px;
+            padding: 8px 12px;
+            font-size: 12.5px;
+            line-height: 1.2;
+        }
+
+        /* ترتيب رأس المجموعة وبطاقات الإحصائيات جنب بعض */
+        .group-top {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 12px;
+        }
+        .group-top > .btn {
+            align-self: flex-start;
+        }
+        .group-heading {
+            width: 100%;
+            text-align: center;
+        }
+        .stats-pills {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            width: 100%;
+            margin-top: 8px;
+        }
+        .stat-pill {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 8px 10px;
+            border-radius: 12px;
+            font-size: 12.5px;
+            line-height: 1.35;
+        }
+
+        /* ترتيب أزرار شريط الأدوات جنب بعض بتناسق */
+        .toolbar {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 10px;
+        }
+        .date-box {
+            justify-content: center;
+            width: 100%;
+        }
+        .toolbar-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            width: 100%;
+        }
+        .toolbar-buttons .btn {
+            width: 100%;
+            padding: 10px 8px;
+            font-size: 13px;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 10px 12px;
+                gap: 8px;
+            }
+            .brand-box {
+                justify-content: space-between;
+                width: 100%;
+            }
+            .nav-actions {
+                justify-content: flex-start;
+                width: 100%;
+            }
+            .btn-nav {
+                padding: 7px 11px;
+                font-size: 12px;
+            }
+            .stats-pills {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 7px;
+            }
+            .toolbar-buttons {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 7px;
+            }
+            .toolbar-buttons .btn {
+                font-size: 12.5px;
+                padding: 10px 6px;
+                white-space: normal;
+                line-height: 1.3;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -1353,7 +1469,7 @@
     <header class="navbar">
         <div class="brand-box">
             <h1>🎓 سجل الطلاب الذكي</h1>
-            <span class="version-pill">الإصدار 9.5</span>
+            <span class="version-pill">الإصدار 9.6</span>
         </div>
         <nav class="nav-actions">
             <button class="btn-nav" style="background:#0284c7; border-color:#38bdf8;" onclick="openMasterSheet()">📊 الشيت الأساسي</button>
@@ -1836,7 +1952,7 @@
 
     <script>
         /* =====================================================================
-           سجل الطلاب الذكي - الإصدار 9.5 (إعادة هيكلة كاملة + توافق تام مع البيانات)
+           سجل الطلاب الذكي - الإصدار 9.6 (إعادة هيكلة كاملة + توافق تام مع البيانات)
            ===================================================================== */
         const WEEK_DAYS = ['السبت', 'الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'];
         const MONTHLY_LIMIT = 4;
@@ -3391,7 +3507,7 @@
             return {
                 format: BACKUP_FORMAT,
                 backupVersion: 3,
-                appVersion: '9.5',
+                appVersion: '9.6',
                 createdAt: new Date().toISOString(),
                 teacherName: getTeacherName(),
                 groups,
@@ -3469,7 +3585,7 @@
             }
         });
 
-        /* ===== اللوحة المختصرة التلقائية + الشيت الأساسي الكبير (الإصدار 9.5) ===== */
+        /* ===== اللوحة المختصرة التلقائية + الشيت الأساسي الكبير (الإصدار 9.6) ===== */
         function getStudentPaidTotal(student, group) {
             const fee = group ? (Number(group.fee) || 0) : 0;
             let total = 0;
@@ -3710,7 +3826,7 @@
             setTimeout(() => URL.revokeObjectURL(url), 1500);
         }
 
-        /* ===== لوحة حصص اليوم + النظام اليومي السريع (الإصدار 9.5) ===== */
+        /* ===== لوحة حصص اليوم + النظام اليومي السريع (الإصدار 9.6) ===== */
         function renderTodayPanel() {
             const pill = document.getElementById('todayPanelDatePill');
             const box = document.getElementById('todayPanelContent');
@@ -3860,7 +3976,7 @@
             }).join('');
         }
 
-        /* ===== الاسم القابل للتعديل (الإصدار 9.5) ===== */
+        /* ===== الاسم القابل للتعديل (الإصدار 9.6) ===== */
         const TEACHER_NAME_KEY = 'teacher_name_v1';
         const DEFAULT_TEACHER_NAME = 'Mr. Tarek Ibrahim';
 
