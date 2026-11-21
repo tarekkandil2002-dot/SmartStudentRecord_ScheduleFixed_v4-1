@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>سجل الطلاب الذكي - الإصدار 9.0</title>
+    <title>سجل الطلاب الذكي - الإصدار 9.3</title>
 
     <meta name="theme-color" content="#1d4ed8">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -694,6 +694,552 @@
             .welcome-chips { justify-content: center; }
             .form-grid { grid-template-columns: 1fr; }
         }
+
+        /* ===== الإصدار 9.3 — اللوحة المختصرة التلقائية + الشيت الأساسي الكبير ===== */
+        .auto-dashboard {
+            background: #fff;
+            border: 1px solid #dbeafe;
+            border-radius: 20px;
+            padding: 18px 20px;
+            margin-bottom: 22px;
+            box-shadow: 0 8px 22px rgba(15, 23, 42, 0.05);
+        }
+        .auto-dash-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+        .auto-dash-head h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 900;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+            gap: 12px;
+        }
+        .kpi-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            transition: 0.18s;
+        }
+        .kpi-card.clickable { cursor: pointer; }
+        .kpi-card.clickable:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(15, 23, 42, 0.08); }
+        .kpi-card.blue { background: #eff6ff; border-color: #bfdbfe; }
+        .kpi-card.green { background: #ecfdf5; border-color: #a7f3d0; }
+        .kpi-card.red { background: #fff1f2; border-color: #fecdd3; }
+        .kpi-card.purple { background: #f5f3ff; border-color: #ddd6fe; }
+        .kpi-card.amber { background: #fffbeb; border-color: #fde68a; }
+        .kpi-label { font-size: 12px; font-weight: 800; color: var(--muted); }
+        .kpi-value { font-size: 24px; font-weight: 900; color: var(--dark); line-height: 1.2; }
+        .kpi-sub { font-size: 11px; font-weight: 700; color: #475569; }
+
+        /* ===== Master Sheet View ===== */
+        #masterSheetView {
+            display: none;
+            background: #fff;
+            border: 1px solid #dbeafe;
+            border-radius: 20px;
+            padding: 22px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+        }
+        .master-filters {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr 1fr 1fr auto;
+            gap: 10px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 12px;
+            margin-bottom: 16px;
+            align-items: end;
+        }
+        .master-summary-strip {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        @media (max-width: 900px) {
+            .master-filters { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 560px) {
+            .master-filters { grid-template-columns: 1fr; }
+        }
+        @media print {
+            .navbar, .toolbar, .master-filters, .btn, .no-print { display: none !important; }
+            body { background: #fff !important; }
+            #masterSheetView { border: 0; box-shadow: none; padding: 0; }
+        }
+
+
+        /* ===== الإصدار 9.3 — لوحة حصص اليوم + النظام اليومي السريع ===== */
+        .today-panel {
+            background: linear-gradient(135deg, #fff7ed 0%, #ffffff 55%, #eff6ff 100%);
+            border: 2px solid #93c5fd;
+            border-radius: 20px;
+            padding: 18px 20px;
+            margin-bottom: 22px;
+            box-shadow: 0 10px 24px rgba(29, 78, 216, 0.09);
+        }
+        .today-panel-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+        .today-panel-head h3 {
+            margin: 0;
+            font-size: 19px;
+            font-weight: 900;
+            color: #1e3a8a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .today-date-pill {
+            background: #dbeafe;
+            color: #1d4ed8;
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 800;
+        }
+        .today-groups-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 12px;
+        }
+        .today-group-card {
+            background: #ffffff;
+            border: 1.5px solid #bfdbfe;
+            border-right: 6px solid #1d4ed8;
+            border-radius: 16px;
+            padding: 15px 16px;
+            cursor: pointer;
+            transition: 0.18s;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+        }
+        .today-group-card:hover {
+            transform: translateY(-3px);
+            border-color: #2563eb;
+            box-shadow: 0 10px 22px rgba(37, 99, 235, 0.14);
+        }
+        .today-group-title {
+            font-size: 18px;
+            font-weight: 900;
+            color: var(--dark);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 6px;
+        }
+        .today-group-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 800;
+        }
+        .today-empty-box {
+            background: rgba(255, 255, 255, 0.85);
+            border: 1.5px dashed #cbd5e1;
+            border-radius: 14px;
+            padding: 16px;
+            text-align: center;
+            color: var(--muted);
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        /* ===== Mode Switcher inside Group View ===== */
+        .view-mode-tabs {
+            display: flex;
+            gap: 8px;
+            background: #f1f5f9;
+            padding: 6px;
+            border-radius: 14px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .mode-tab-btn {
+            flex: 1;
+            min-width: 190px;
+            border: 0;
+            background: transparent;
+            color: #475569;
+            padding: 11px 16px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.18s;
+            font-family: inherit;
+        }
+        .mode-tab-btn.active {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.22);
+        }
+
+        /* ===== Daily Fast Attendance & Payment List ===== */
+        .daily-summary-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+        .daily-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+        .daily-row {
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            transition: 0.15s;
+        }
+        .daily-row.is-present {
+            border-color: #86efac;
+            background: #f0fdf4;
+        }
+        .daily-row.is-unpaid {
+            border-color: #fda4af;
+            background: #fff1f2;
+        }
+        .daily-student-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            min-width: 180px;
+        }
+        .daily-num {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            color: var(--dark);
+            font-weight: 900;
+            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .daily-row.is-present .daily-num { background: #10b981; color: #fff; }
+        .daily-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .daily-toggle-btn {
+            border: 1.5px solid #cbd5e1;
+            border-radius: 11px;
+            padding: 9px 15px;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            font-family: inherit;
+            transition: 0.15s;
+            min-width: 112px;
+        }
+        .daily-toggle-btn.att-yes {
+            background: #10b981;
+            border-color: #059669;
+            color: #fff;
+            box-shadow: 0 3px 10px rgba(16, 185, 129, 0.25);
+        }
+        .daily-toggle-btn.att-no {
+            background: #ffffff;
+            border-color: #cbd5e1;
+            color: #64748b;
+        }
+        .daily-toggle-btn.pay-yes {
+            background: #2563eb;
+            border-color: #1d4ed8;
+            color: #fff;
+            box-shadow: 0 3px 10px rgba(37, 99, 235, 0.25);
+        }
+        .daily-toggle-btn.pay-no {
+            background: #fff1f2;
+            border-color: #fda4af;
+            color: #be123c;
+        }
+        .daily-toggle-btn.pay-muted {
+            background: #f8fafc;
+            border-color: #e2e8f0;
+            color: #94a3b8;
+        }
+        .daily-toggle-btn.pay-monthly-ok {
+            background: #f3e8ff;
+            border-color: #c084fc;
+            color: #6b21a8;
+        }
+        .daily-toggle-btn.pay-monthly-due {
+            background: #e11d48;
+            border-color: #be123c;
+            color: #fff;
+        }
+        .auto-sync-note {
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            color: #065f46;
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+
+        /* ===== الإصدار 9.3 — التصميم الزجاجي الفاخر (Glassmorphism UI) ===== */
+        body {
+            background:
+                radial-gradient(circle at 12% 14%, rgba(56, 189, 248, 0.32) 0%, transparent 42%),
+                radial-gradient(circle at 86% 16%, rgba(139, 92, 246, 0.28) 0%, transparent 44%),
+                radial-gradient(circle at 80% 85%, rgba(16, 185, 129, 0.22) 0%, transparent 45%),
+                radial-gradient(circle at 18% 84%, rgba(59, 130, 246, 0.24) 0%, transparent 45%),
+                linear-gradient(135deg, #e0f2fe 0%, #eef2ff 48%, #f0fdfa 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: #0f172a;
+        }
+
+        /* Glass Navbar */
+        .navbar {
+            background: linear-gradient(110deg, rgba(30, 58, 138, 0.80) 0%, rgba(29, 78, 216, 0.78) 52%, rgba(79, 70, 229, 0.80) 100%);
+            backdrop-filter: blur(18px) saturate(180%);
+            -webkit-backdrop-filter: blur(18px) saturate(180%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+            box-shadow: 0 10px 32px rgba(30, 58, 138, 0.22);
+        }
+        .version-pill {
+            background: rgba(255, 255, 255, 0.22);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.45);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+        }
+        .btn-nav {
+            background: rgba(255, 255, 255, 0.16);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.34);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 4px 12px rgba(15, 23, 42, 0.10);
+        }
+        .btn-nav:hover {
+            background: rgba(255, 255, 255, 0.28);
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.18);
+        }
+        .btn-nav.green { background: rgba(5, 150, 105, 0.82); border-color: rgba(167, 243, 208, 0.55); }
+        .btn-nav.red { background: rgba(225, 29, 72, 0.82); border-color: rgba(254, 205, 211, 0.55); }
+        .btn-nav.teal { background: rgba(15, 118, 110, 0.82); border-color: rgba(153, 246, 228, 0.55); }
+        .btn-nav.purple { background: rgba(109, 40, 217, 0.82); border-color: rgba(221, 214, 254, 0.55); }
+
+        /* Glass Surfaces */
+        .welcome-banner,
+        .today-panel,
+        .auto-dashboard,
+        .group-card,
+        #groupView,
+        #masterSheetView {
+            background: rgba(255, 255, 255, 0.62);
+            backdrop-filter: blur(18px) saturate(165%);
+            -webkit-backdrop-filter: blur(18px) saturate(165%);
+            border: 1px solid rgba(255, 255, 255, 0.78);
+            box-shadow:
+                0 12px 34px rgba(30, 58, 138, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.85);
+        }
+
+        .welcome-banner {
+            background: linear-gradient(120deg, rgba(219, 234, 254, 0.72) 0%, rgba(255, 255, 255, 0.66) 52%, rgba(224, 231, 255, 0.72) 100%);
+            border-radius: 24px;
+        }
+        .welcome-chips span {
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.85);
+            box-shadow: 0 2px 8px rgba(29, 78, 216, 0.06);
+        }
+
+        .today-panel {
+            background: linear-gradient(135deg, rgba(255, 247, 237, 0.70) 0%, rgba(255, 255, 255, 0.68) 55%, rgba(219, 234, 254, 0.72) 100%);
+            border: 1.5px solid rgba(147, 197, 253, 0.82);
+            border-radius: 24px;
+        }
+        .today-group-card {
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            border-right: 6px solid #2563eb;
+            box-shadow: 0 6px 18px rgba(30, 58, 138, 0.07);
+        }
+        .today-group-card:hover {
+            background: rgba(255, 255, 255, 0.92);
+            transform: translateY(-4px);
+            box-shadow: 0 14px 28px rgba(37, 99, 235, 0.16);
+        }
+        .today-empty-box {
+            background: rgba(255, 255, 255, 0.58);
+            border: 1.5px dashed rgba(148, 163, 184, 0.65);
+        }
+
+        /* Glass KPI Cards */
+        .kpi-card {
+            background: rgba(255, 255, 255, 0.66);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.82);
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+        }
+        .kpi-card.blue { background: rgba(239, 246, 255, 0.74); border-color: rgba(191, 219, 254, 0.9); }
+        .kpi-card.green { background: rgba(236, 253, 245, 0.74); border-color: rgba(167, 243, 208, 0.9); }
+        .kpi-card.red { background: rgba(255, 241, 242, 0.76); border-color: rgba(254, 205, 211, 0.9); }
+        .kpi-card.purple { background: rgba(245, 243, 255, 0.74); border-color: rgba(221, 214, 254, 0.9); }
+        .kpi-card.amber { background: rgba(255, 251, 235, 0.74); border-color: rgba(253, 230, 138, 0.9); }
+
+        /* Glass Search */
+        .search-input {
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1.5px solid rgba(255, 255, 255, 0.88);
+            box-shadow: 0 6px 20px rgba(30, 58, 138, 0.06);
+        }
+        .search-input:focus {
+            background: rgba(255, 255, 255, 0.92);
+            border-color: rgba(59, 130, 246, 0.75);
+        }
+        .search-dropdown {
+            background: rgba(255, 255, 255, 0.90);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.95);
+        }
+
+        /* Glass Group Cards */
+        .group-card {
+            border-bottom: 5px solid rgba(37, 99, 235, 0.85);
+            border-radius: 22px;
+        }
+        .group-card:hover {
+            background: rgba(255, 255, 255, 0.80);
+            transform: translateY(-5px);
+            box-shadow: 0 18px 34px rgba(30, 58, 138, 0.13);
+        }
+        .icon-btn {
+            background: rgba(255, 255, 255, 0.75);
+            border: 1px solid rgba(226, 232, 240, 0.9);
+        }
+
+        /* Glass Inner Views, Tabs, Daily Rows & Tables */
+        .view-mode-tabs {
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.82);
+        }
+        .date-box,
+        .master-filters {
+            background: rgba(255, 255, 255, 0.62);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.85);
+        }
+        .daily-row {
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+        }
+        .daily-row.is-present {
+            background: rgba(240, 253, 244, 0.86);
+            border-color: rgba(134, 239, 172, 0.85);
+        }
+        .daily-row.is-unpaid {
+            background: rgba(255, 241, 242, 0.88);
+            border-color: rgba(253, 164, 175, 0.88);
+        }
+        .table-wrap {
+            background: rgba(255, 255, 255, 0.76);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05);
+        }
+        table.students-table th {
+            background: rgba(241, 245, 249, 0.85);
+        }
+        table.students-table tr:hover {
+            background: rgba(239, 246, 255, 0.62);
+        }
+        .report-box {
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            border-right: 6px solid var(--primary);
+        }
+
+        /* Glass Modals & Toasts */
+        .modal {
+            background: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        .modal-card {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(22px) saturate(180%);
+            -webkit-backdrop-filter: blur(22px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.92);
+            box-shadow: 0 24px 60px rgba(15, 23, 42, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+        }
+        .toast-card {
+            background: rgba(255, 255, 255, 0.90);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+        .form-control {
+            background: rgba(255, 255, 255, 0.84);
+        }
+
     </style>
 </head>
 <body>
@@ -701,9 +1247,10 @@
     <header class="navbar">
         <div class="brand-box">
             <h1>🎓 سجل الطلاب الذكي</h1>
-            <span class="version-pill">الإصدار 9.0</span>
+            <span class="version-pill">الإصدار 9.3</span>
         </div>
         <nav class="nav-actions">
+            <button class="btn-nav" style="background:#0284c7; border-color:#38bdf8;" onclick="openMasterSheet()">📊 الشيت الأساسي</button>
             <button class="btn-nav green" onclick="openFinanceModal()">💰 الإجمالي العام</button>
             <button class="btn-nav red" onclick="openTodayModal()">🔔 مواعيد اليوم</button>
             <button class="btn-nav teal" onclick="openScheduleModal()">🗓️ جدول المجموعات</button>
@@ -730,6 +1277,24 @@
                 </div>
                 <div class="welcome-icons" aria-hidden="true">🎓📚✏️</div>
             </div>
+            <!-- لوحة حصص اليوم (تظهر مجموعات النهاردة تلقائياً) -->
+            <div class="today-panel">
+                <div class="today-panel-head">
+                    <h3>📌 لوحة حصص اليوم — اضغط على المجموعة لتسجيل الحضور والدفع</h3>
+                    <span class="today-date-pill" id="todayPanelDatePill"></span>
+                </div>
+                <div id="todayPanelContent"></div>
+            </div>
+
+            <!-- اللوحة المختصرة التلقائية -->
+            <div class="auto-dashboard">
+                <div class="auto-dash-head">
+                    <h3>📈 اللوحة المختصرة التلقائية (تتحدث لحظياً)</h3>
+                    <button class="btn btn-sm btn-primary" onclick="openMasterSheet()">📊 فتح الشيت الأساسي الكبير</button>
+                </div>
+                <div class="kpi-grid" id="autoDashboardKpis"></div>
+            </div>
+
 
             <div class="search-wrap">
                 <input type="text" id="globalSearch" class="search-input" placeholder="🔍 ابحث عن طالب بالاسم لفتح مجموعته أو أرشيفه الشخصي..." oninput="performSearch()">
@@ -772,7 +1337,25 @@
                 </div>
             </div>
 
+            <div class="view-mode-tabs">
+                <button type="button" id="tabDailyMode" class="mode-tab-btn active" onclick="setGroupViewMode('daily')">⚡ النظام اليومي (الحضور والدفع فقط)</button>
+                <button type="button" id="tabMonthlyMode" class="mode-tab-btn" onclick="setGroupViewMode('monthly')">📋 سجل الشهر الكامل (دورة 4 حصص)</button>
+            </div>
+
             <div id="monthlyDueBanner" class="due-banner"></div>
+
+            <!-- وضع النظام اليومي المختصر -->
+            <div id="dailyModeSection">
+                <div class="daily-summary-bar" id="dailySummaryBar"></div>
+                <div class="auto-sync-note">
+                    <span>✅ كل ضغطة حضور أو دفع تُرصد تلقائياً في سجل الشهر وأرشيف الطالب والشيت الأساسي.</span>
+                    <button type="button" class="btn btn-sm btn-dark" onclick="advanceToNextSession()">🔄 إنهاء حصة اليوم والانتقال للحصة القادمة</button>
+                </div>
+                <div class="daily-list" id="dailyStudentsList"></div>
+            </div>
+
+            <!-- وضع سجل الشهر الكامل -->
+            <div id="monthlyModeSection" style="display:none;">
 
             <div class="table-wrap">
                 <table class="students-table">
@@ -797,9 +1380,77 @@
                 </table>
             </div>
 
+            </div>
+
             <button class="btn btn-danger" style="width:100%; padding:14px; font-size:16px;" onclick="generateReport()">📄 إصدار تقرير الحصة الحالية</button>
             <div id="reportBox" class="report-box"></div>
         </section>
+
+        <!-- ===== Master Sheet View (الشيت الأساسي الكبير) ===== -->
+        <section id="masterSheetView">
+            <div class="group-top">
+                <button class="btn btn-ghost no-print" onclick="showDashboard()">🔙 العودة للرئيسية</button>
+                <div class="group-heading">
+                    <h2>📊 الشيت الأساسي الكبير (جميع الطلاب والمجموعات)</h2>
+                    <p style="margin:0; color:var(--muted); font-size:13px; font-weight:700;">يعرض كل البيانات مجمعة في جدول واحد ويتحدث تلقائياً مع اللوحة المختصرة.</p>
+                </div>
+                <div style="display:flex; gap:8px; flex-wrap:wrap;" class="no-print">
+                    <button class="btn btn-success" onclick="exportMasterSheetCSV()">📥 تصدير إكسل (CSV)</button>
+                    <button class="btn btn-dark" onclick="window.print()">🖨️ طباعة</button>
+                </div>
+            </div>
+
+            <div class="master-summary-strip" id="masterSummaryStrip"></div>
+
+            <div class="master-filters no-print">
+                <div class="form-group">
+                    <label>🔍 بحث بالاسم أو الهاتف</label>
+                    <input type="text" id="msSearch" class="form-control" placeholder="اكتب اسم الطالب..." oninput="renderMasterSheet()">
+                </div>
+                <div class="form-group">
+                    <label>📁 المجموعة</label>
+                    <select id="msGroupFilter" class="form-control" onchange="renderMasterSheet()"></select>
+                </div>
+                <div class="form-group">
+                    <label>💳 نظام الدفع</label>
+                    <select id="msPayModeFilter" class="form-control" onchange="renderMasterSheet()">
+                        <option value="all">الكل (بالحصة + بالشهر)</option>
+                        <option value="session">💵 بالحصة فقط</option>
+                        <option value="monthly">💳 بالشهر فقط</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>🔔 حالة السداد</label>
+                    <select id="msStatusFilter" class="form-control" onchange="renderMasterSheet()">
+                        <option value="all">الكل</option>
+                        <option value="due">⚠️ مستحق دفع فقط</option>
+                        <option value="ok">✅ مسدد / منتظم فقط</option>
+                    </select>
+                </div>
+                <button class="btn btn-ghost" onclick="resetMasterFilters()">🔄 الكل</button>
+            </div>
+
+            <div class="table-wrap">
+                <table class="students-table" style="min-width:980px;">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th style="text-align:right;">اسم الطالب</th>
+                            <th>الصف والمجموعة</th>
+                            <th>الميعاد</th>
+                            <th>نظام الدفع</th>
+                            <th>الحضور</th>
+                            <th>موقف السداد</th>
+                            <th>إجمالي المدفوع</th>
+                            <th>التقييم</th>
+                            <th class="no-print">ملف الطالب</th>
+                        </tr>
+                    </thead>
+                    <tbody id="masterSheetBody"></tbody>
+                </table>
+            </div>
+        </section>
+
     </main>
 
     <!-- ===== Modal: Add / Edit Group ===== -->
@@ -1069,7 +1720,7 @@
 
     <script>
         /* =====================================================================
-           سجل الطلاب الذكي - الإصدار 9.0 (إعادة هيكلة كاملة + توافق تام مع البيانات)
+           سجل الطلاب الذكي - الإصدار 9.3 (إعادة هيكلة كاملة + توافق تام مع البيانات)
            ===================================================================== */
         const WEEK_DAYS = ['السبت', 'الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'];
         const MONTHLY_LIMIT = 4;
@@ -1095,6 +1746,7 @@
         if (!Array.isArray(legacySchedules)) legacySchedules = [];
 
         let activeGroupId = null;
+        let currentGroupViewMode = 'daily';
         let selectedStudentIds = new Set();
         let notifiedEvents = readStoredJSON(sessionStorage, 'notifiedEvents', {});
 
@@ -1399,6 +2051,10 @@
             activeGroupId = null;
             document.getElementById('dashboardView').style.display = 'block';
             document.getElementById('groupView').style.display = 'none';
+            const msView = document.getElementById('masterSheetView');
+            if (msView) msView.style.display = 'none';
+            renderTodayPanel();
+            renderAutoDashboard();
             document.getElementById('globalSearch').value = '';
             document.getElementById('searchResults').style.display = 'none';
 
@@ -1441,7 +2097,11 @@
                             ${dueCount > 0 ? `<span class="pill pill-due">🔔 مستحق دفع: ${dueCount}</span>` : ''}
                         </div>
                         <hr style="border:0; border-top:1px solid #f1f5f9; margin:14px 0 10px;">
-                        <div style="font-weight:800; color:var(--primary); font-size:14px;">👥 عدد الطلاب: ${gStudents.length}</div>
+                        <div style="font-weight:800; color:var(--primary); font-size:14px; margin-bottom:10px;">👥 عدد الطلاب: ${gStudents.length}</div>
+                        <div style="display:flex; gap:6px; justify-content:center;">
+                            <button type="button" class="btn btn-sm btn-primary" style="flex:1;" onclick="event.stopPropagation(); openGroup('${group.id}', 'daily')">⚡ حضور اليوم</button>
+                            <button type="button" class="btn btn-sm btn-ghost" style="flex:1;" onclick="event.stopPropagation(); openGroup('${group.id}', 'monthly')">📋 سجل الشهر</button>
+                        </div>
                     </div>
                 `;
             }).join('');
@@ -1634,7 +2294,7 @@
         }
 
         /* ===== Open Group View ===== */
-        function openGroup(groupId) {
+        function openGroup(groupId, preferredMode = 'daily') {
             const group = groups.find(g => g.id === groupId);
             if (!group) return;
             activeGroupId = groupId;
@@ -1647,6 +2307,8 @@
 
             document.getElementById('dashboardView').style.display = 'none';
             document.getElementById('groupView').style.display = 'block';
+            const msView = document.getElementById('masterSheetView');
+            if (msView) msView.style.display = 'none';
             document.getElementById('reportBox').style.display = 'none';
 
             document.getElementById('currentGroupTitle').innerText = `${group.grade} - ${group.name}`;
@@ -1656,6 +2318,7 @@
             document.getElementById('groupScheduleBadge').innerText = `🗓️ ${day} • ⏰ ${tText} ✏️`;
             document.getElementById('classDate').value = group.date;
 
+            setGroupViewMode(preferredMode, false);
             renderStudentsTable();
         }
 
@@ -1714,6 +2377,8 @@
             const gStudents = students.filter(s => s.groupId === activeGroupId);
             document.getElementById('totalMoneyText').innerText = calculateGroupTotalMoney(group);
             document.getElementById('todayMoneyText').innerText = calculateGroupCurrentSessionMoney(group);
+
+            renderDailyList(group, gStudents, cur, curIdx);
 
             // تنبيه المستحقين للدفع (سواء بالشهر بعد 4 حصص أو بالحصة لمن حضر ولم يسدد)
             const dueStudents = gStudents.filter(s => isStudentPaymentDue(s, cur));
@@ -2577,7 +3242,7 @@
             return {
                 format: BACKUP_FORMAT,
                 backupVersion: 3,
-                appVersion: '9.0',
+                appVersion: '9.3',
                 createdAt: new Date().toISOString(),
                 groups,
                 students
@@ -2650,6 +3315,397 @@
                 e.returnValue = '';
             }
         });
+
+        /* ===== اللوحة المختصرة التلقائية + الشيت الأساسي الكبير (الإصدار 9.3) ===== */
+        function getStudentPaidTotal(student, group) {
+            const fee = group ? (Number(group.fee) || 0) : 0;
+            let total = 0;
+            if (Array.isArray(student.paidSessions)) {
+                total += student.paidSessions.filter(Boolean).length * fee;
+            }
+            if (Array.isArray(student.monthlyPaymentsHistory) && student.monthlyPaymentsHistory.length > 0) {
+                student.monthlyPaymentsHistory.forEach(h => { total += Number(h.amount) || 0; });
+            } else if (student.monthlyPaymentDate) {
+                total += fee * 4;
+            }
+            return total;
+        }
+
+        function renderAutoDashboard() {
+            const kpiBox = document.getElementById('autoDashboardKpis');
+            if (!kpiBox) return;
+
+            const totalGroups = groups.length;
+            const totalStudents = students.length;
+            let monthlyCount = 0;
+            let sessionCount = 0;
+            let dueCount = 0;
+            let totalMoney = 0;
+            let totalAttSum = 0;
+            let totalSesSum = 0;
+
+            groups.forEach(g => { totalMoney += calculateGroupTotalMoney(g); });
+
+            students.forEach(s => {
+                const g = groups.find(x => x.id === s.groupId);
+                const cur = g ? (g.currentSession || 1) : 1;
+                if (s.paymentMode === 'monthly') monthlyCount++;
+                else sessionCount++;
+                if (isStudentPaymentDue(s, cur)) dueCount++;
+                totalAttSum += getStudentAttendedCount(s);
+                totalSesSum += (Number(s.totalSessions) || 0) + cur;
+            });
+
+            const avgAtt = totalSesSum > 0 ? Math.min(100, Math.round((totalAttSum / totalSesSum) * 100)) : 0;
+
+            kpiBox.innerHTML = `
+                <div class="kpi-card blue clickable" onclick="openMasterSheet('all')" title="اضغط لفتح الشيت الأساسي">
+                    <span class="kpi-label">👥 إجمالي الطلاب</span>
+                    <span class="kpi-value">${totalStudents}</span>
+                    <span class="kpi-sub">في ${totalGroups} مجموعة دراسية</span>
+                </div>
+                <div class="kpi-card purple clickable" onclick="openMasterSheet('monthly')" title="عرض طلاب الدفع الشهري">
+                    <span class="kpi-label">💳 توزيع نظام الدفع</span>
+                    <span class="kpi-value">${monthlyCount} <small style="font-size:13px;font-weight:700;">شهري</small></span>
+                    <span class="kpi-sub">💵 ${sessionCount} طالب بالحصة</span>
+                </div>
+                <div class="kpi-card green clickable" onclick="openFinanceModal()" title="عرض تفاصيل الإيرادات">
+                    <span class="kpi-label">💰 إجمالي التحصيل</span>
+                    <span class="kpi-value">${totalMoney} <small style="font-size:14px;">ج</small></span>
+                    <span class="kpi-sub">حصة + اشتراكات شهرية</span>
+                </div>
+                <div class="kpi-card red clickable" onclick="openMasterSheet('due')" title="عرض الطلاب المستحق عليهم الدفع">
+                    <span class="kpi-label">🔔 مستحق عليهم دفع</span>
+                    <span class="kpi-value" style="color:var(--danger);">${dueCount}</span>
+                    <span class="kpi-sub">${dueCount > 0 ? 'اضغط لعرضهم في الشيت' : 'لا توجد متأخرات 🎉'}</span>
+                </div>
+                <div class="kpi-card amber">
+                    <span class="kpi-label">📊 متوسط الحضور العام</span>
+                    <span class="kpi-value">${avgAtt}%</span>
+                    <span class="kpi-sub">تحديث تلقائي مستمر</span>
+                </div>
+            `;
+        }
+
+        function openMasterSheet(preset = 'all') {
+            activeGroupId = null;
+            document.getElementById('dashboardView').style.display = 'none';
+            document.getElementById('groupView').style.display = 'none';
+            document.getElementById('masterSheetView').style.display = 'block';
+
+            const groupSelect = document.getElementById('msGroupFilter');
+            groupSelect.innerHTML = '<option value="all">جميع المجموعات</option>' + groups.map(g =>
+                `<option value="${g.id}">${escHtml(g.grade)} - ${escHtml(g.name)}</option>`
+            ).join('');
+
+            document.getElementById('msSearch').value = '';
+            document.getElementById('msGroupFilter').value = 'all';
+            document.getElementById('msPayModeFilter').value = (preset === 'monthly' || preset === 'session') ? preset : 'all';
+            document.getElementById('msStatusFilter').value = (preset === 'due') ? 'due' : 'all';
+
+            renderMasterSheet();
+        }
+
+        function resetMasterFilters() {
+            document.getElementById('msSearch').value = '';
+            document.getElementById('msGroupFilter').value = 'all';
+            document.getElementById('msPayModeFilter').value = 'all';
+            document.getElementById('msStatusFilter').value = 'all';
+            renderMasterSheet();
+        }
+
+        function getFilteredMasterRows() {
+            const q = (document.getElementById('msSearch').value || '').trim().toLowerCase();
+            const gFilter = document.getElementById('msGroupFilter').value;
+            const modeFilter = document.getElementById('msPayModeFilter').value;
+            const statusFilter = document.getElementById('msStatusFilter').value;
+
+            return students.map(s => {
+                const g = groups.find(x => x.id === s.groupId) || null;
+                const cur = g ? (g.currentSession || 1) : 1;
+                const isDue = isStudentPaymentDue(s, cur);
+                const totalAtt = getStudentAttendedCount(s);
+                const totalSes = (Number(s.totalSessions) || 0) + cur;
+                const perc = totalSes > 0 ? Math.min(100, Math.round((totalAtt / totalSes) * 100)) : 0;
+                const paidTotal = getStudentPaidTotal(s, g);
+                return { student: s, group: g, cur, isDue, totalAtt, totalSes, perc, paidTotal };
+            }).filter(row => {
+                if (gFilter !== 'all' && (!row.group || row.group.id !== gFilter)) return false;
+                if (modeFilter !== 'all' && row.student.paymentMode !== modeFilter) return false;
+                if (statusFilter === 'due' && !row.isDue) return false;
+                if (statusFilter === 'ok' && row.isDue) return false;
+                if (q) {
+                    const hay = `${row.student.name || ''} ${row.student.phone || ''} ${row.group ? row.group.name + ' ' + row.group.grade : ''}`.toLowerCase();
+                    if (!hay.includes(q)) return false;
+                }
+                return true;
+            });
+        }
+
+        function renderMasterSheet() {
+            const rows = getFilteredMasterRows();
+            const strip = document.getElementById('masterSummaryStrip');
+            const tbody = document.getElementById('masterSheetBody');
+
+            const sumPaid = rows.reduce((acc, r) => acc + r.paidTotal, 0);
+            const sumDue = rows.filter(r => r.isDue).length;
+            const avgPerc = rows.length ? Math.round(rows.reduce((acc, r) => acc + r.perc, 0) / rows.length) : 0;
+
+            strip.innerHTML = `
+                <div class="kpi-card blue"><span class="kpi-label">عدد الطلاب الظاهرين</span><span class="kpi-value">${rows.length}</span></div>
+                <div class="kpi-card green"><span class="kpi-label">إجمالي المدفوعات</span><span class="kpi-value">${sumPaid} <small style="font-size:14px;">ج</small></span></div>
+                <div class="kpi-card red"><span class="kpi-label">مستحق عليهم دفع</span><span class="kpi-value" style="color:var(--danger);">${sumDue}</span></div>
+                <div class="kpi-card amber"><span class="kpi-label">متوسط الحضور</span><span class="kpi-value">${avgPerc}%</span></div>
+            `;
+
+            if (!rows.length) {
+                tbody.innerHTML = `<tr><td colspan="10" style="padding:26px; color:var(--muted);">لا توجد بيانات مطابقة للفلتر الحالي.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = rows.map((r, idx) => {
+                const s = r.student;
+                const g = r.group;
+                const isMonthly = s.paymentMode === 'monthly';
+                const fee = g ? (Number(g.fee) || 0) : 0;
+                let statusHtml = '';
+                if (isMonthly) {
+                    const m = getStudentMonthlyState(s);
+                    statusHtml = m.isDue
+                        ? `<span class="cycle-badge cycle-due">🔔 مستحق تجديد (${m.attendedSincePay}/4)</span>`
+                        : `<span class="cycle-badge cycle-ok">✅ ${m.attendedSincePay}/4 حصص</span>`;
+                } else {
+                    const sp = getStudentSessionPayState(s, r.cur);
+                    statusHtml = sp.isDue
+                        ? `<span class="cycle-badge cycle-due">⚠️ عليه ${sp.unpaidAttendedCount * fee} ج</span>`
+                        : `<span class="cycle-badge cycle-ok">✅ مسدد</span>`;
+                }
+
+                const day = g && g.days && g.days[0] ? g.days[0] : '—';
+                const time = g && g.exactTime ? formatTime12(g.exactTime) : '';
+                const attCls = r.perc >= 85 ? 'att-high' : (r.perc >= 50 ? 'att-med' : 'att-low');
+
+                return `
+                    <tr class="${r.isDue ? 'row-warning' : ''}">
+                        <td><strong>${idx + 1}</strong></td>
+                        <td style="text-align:right;">
+                            <button type="button" class="student-name-btn" onclick="openStudentArchiveModal('${s.id}')">👤 ${escHtml(s.name)}</button>
+                            ${s.phone ? `<div style="font-size:11px; color:var(--muted);">📞 ${escHtml(s.phone)}</div>` : ''}
+                        </td>
+                        <td>
+                            ${g ? `<button type="button" class="mini-tag" onclick="openGroup('${g.id}')">${escHtml(g.grade)} - ${escHtml(g.name)}</button>` : '—'}
+                        </td>
+                        <td style="font-size:12px; font-weight:700; color:var(--muted);">${escHtml(day)} ${time ? '<br>' + escHtml(time) : ''}</td>
+                        <td><span class="pay-mode-pill ${isMonthly ? 'mode-monthly' : 'mode-session'}" style="cursor:default;">${isMonthly ? '💳 بالشهر' : '💵 بالحصة'}</span></td>
+                        <td><span class="att-badge ${attCls}">${r.perc}% (${r.totalAtt}/${r.totalSes})</span></td>
+                        <td>${statusHtml}</td>
+                        <td><strong style="color:var(--success);">${r.paidTotal} ج</strong></td>
+                        <td><strong>${s.points || 0} ⭐</strong></td>
+                        <td class="no-print">
+                            <button type="button" class="btn btn-sm btn-purple" onclick="openStudentArchiveModal('${s.id}')">📂 الأرشيف</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function exportMasterSheetCSV() {
+            const rows = getFilteredMasterRows();
+            if (!rows.length) { alert('لا توجد بيانات لتصديرها.'); return; }
+            const headers = ['م', 'اسم الطالب', 'رقم الهاتف', 'الصف الدراسي', 'المجموعة', 'الميعاد', 'نظام الدفع', 'الحضور', 'نسبة الحضور', 'موقف السداد', 'إجمالي المدفوع (ج)', 'النقاط', 'ملاحظات'];
+            const csvLines = [headers.join(',')];
+
+            rows.forEach((r, idx) => {
+                const s = r.student;
+                const g = r.group;
+                const isMonthly = s.paymentMode === 'monthly';
+                const fee = g ? (Number(g.fee) || 0) : 0;
+                let statusTxt = '';
+                if (isMonthly) {
+                    const m = getStudentMonthlyState(s);
+                    statusTxt = m.isDue ? `مستحق تجديد (${m.attendedSincePay}/4)` : `منتظم (${m.attendedSincePay}/4)`;
+                } else {
+                    const sp = getStudentSessionPayState(s, r.cur);
+                    statusTxt = sp.isDue ? `عليه ${sp.unpaidAttendedCount * fee} ج` : 'مسدد';
+                }
+                const vals = [
+                    idx + 1,
+                    s.name || '',
+                    s.phone || '',
+                    g ? (g.grade || '') : '',
+                    g ? (g.name || '') : '',
+                    g ? `${(g.days && g.days[0]) || ''} ${g.exactTime ? formatTime12(g.exactTime) : ''}`.trim() : '',
+                    isMonthly ? 'بالشهر (4 حصص)' : 'بالحصة',
+                    `${r.totalAtt}/${r.totalSes}`,
+                    `${r.perc}%`,
+                    statusTxt,
+                    r.paidTotal,
+                    s.points || 0,
+                    s.note || ''
+                ].map(v => `"${String(v).replace(/"/g, '""')}"`);
+                csvLines.push(vals.join(','));
+            });
+
+            const blob = new Blob(['\uFEFF' + csvLines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `MasterSheet_${localDateString()}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 1500);
+        }
+
+        /* ===== لوحة حصص اليوم + النظام اليومي السريع (الإصدار 9.3) ===== */
+        function renderTodayPanel() {
+            const pill = document.getElementById('todayPanelDatePill');
+            const box = document.getElementById('todayPanelContent');
+            if (!box) return;
+
+            const now = new Date();
+            const jsDays = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+            const todayName = jsDays[now.getDay()];
+            const todayStr = localDateString(now);
+
+            if (pill) pill.innerText = `📅 ${todayName} — ${formatShortDate(todayStr)} (${todayStr})`;
+
+            const todaysGroups = groups
+                .filter(g => g.days && g.days[0] === todayName)
+                .sort((a, b) => (a.exactTime || '99:99').localeCompare(b.exactTime || '99:99'));
+
+            if (!todaysGroups.length) {
+                box.innerHTML = `<div class="today-empty-box">
+                    لا توجد مجموعات مجدولة ليوم <strong>${todayName}</strong> 🏖️<br>
+                    <small style="color:#64748b;">يمكنك الضغط على زر «⚡ حضور اليوم» في أي مجموعة بالأسفل لفتح النظام اليومي لها فوراً.</small>
+                </div>`;
+                return;
+            }
+
+            box.innerHTML = `<div class="today-groups-grid">
+                ${todaysGroups.map(g => {
+                    const gStudents = students.filter(s => s.groupId === g.id);
+                    const cur = g.currentSession || 1;
+                    const curIdx = cur - 1;
+                    const presentCount = gStudents.filter(s => s.attendanceSessions && s.attendanceSessions[curIdx]).length;
+                    const todayCash = calculateGroupCurrentSessionMoney(g);
+                    const timeTxt = g.exactTime ? formatTime12(g.exactTime) : 'بدون وقت';
+
+                    return `
+                        <div class="today-group-card" onclick="openGroup('${g.id}', 'daily')">
+                            <div class="today-group-title">
+                                <span>📚 ${escHtml(g.grade)} - ${escHtml(g.name)}</span>
+                                <span class="pill pill-warn">حصة ${cur}</span>
+                            </div>
+                            <div class="today-group-meta">
+                                <span class="pill" style="background:#eff6ff; color:#1d4ed8;">⏰ ${escHtml(timeTxt)}</span>
+                                <span class="pill" style="background:#ecfdf5; color:#065f46;">✅ حضر ${presentCount} / ${gStudents.length}</span>
+                                <span class="pill" style="background:#f5f3ff; color:#6d28d9;">💵 ${todayCash} ج</span>
+                            </div>
+                            <div style="font-size:12px; font-weight:800; color:var(--primary); margin-top:2px;">
+                                👈 اضغط لفتح الأسماء وتسجيل حضور ودفع اليوم
+                            </div>
+                        </div>
+                    `;
+                }).join('')}
+            </div>`;
+        }
+
+        function setGroupViewMode(mode, shouldRender = true) {
+            currentGroupViewMode = mode === 'monthly' ? 'monthly' : 'daily';
+            const dailySec = document.getElementById('dailyModeSection');
+            const monthlySec = document.getElementById('monthlyModeSection');
+            const tabDaily = document.getElementById('tabDailyMode');
+            const tabMonthly = document.getElementById('tabMonthlyMode');
+
+            if (dailySec) dailySec.style.display = currentGroupViewMode === 'daily' ? 'block' : 'none';
+            if (monthlySec) monthlySec.style.display = currentGroupViewMode === 'monthly' ? 'block' : 'none';
+            if (tabDaily) tabDaily.classList.toggle('active', currentGroupViewMode === 'daily');
+            if (tabMonthly) tabMonthly.classList.toggle('active', currentGroupViewMode === 'monthly');
+
+            if (shouldRender && activeGroupId) renderStudentsTable();
+        }
+
+        function renderDailyList(group, gStudents, cur, curIdx) {
+            const summaryBar = document.getElementById('dailySummaryBar');
+            const listBox = document.getElementById('dailyStudentsList');
+            if (!listBox || !summaryBar) return;
+
+            const fee = Number(group.fee) || 0;
+            const presentCount = gStudents.filter(s => s.attendanceSessions && s.attendanceSessions[curIdx]).length;
+            const absentCount = gStudents.length - presentCount;
+            const todayCash = calculateGroupCurrentSessionMoney(group);
+            const unpaidPresentCount = gStudents.filter(s => {
+                const isAtt = Boolean(s.attendanceSessions && s.attendanceSessions[curIdx]);
+                if (!isAtt) return false;
+                if (s.paymentMode === 'monthly') return getStudentMonthlyState(s).isDue;
+                return !(s.paidSessions && s.paidSessions[curIdx]);
+            }).length;
+
+            summaryBar.innerHTML = `
+                <div class="kpi-card green"><span class="kpi-label">✅ الحاضرون اليوم</span><span class="kpi-value">${presentCount} <small style="font-size:13px;">/ ${gStudents.length}</small></span></div>
+                <div class="kpi-card"><span class="kpi-label">❌ الغائبون</span><span class="kpi-value">${absentCount}</span></div>
+                <div class="kpi-card blue"><span class="kpi-label">💵 حصيلة اليوم</span><span class="kpi-value">${todayCash} <small style="font-size:14px;">ج</small></span></div>
+                <div class="kpi-card red"><span class="kpi-label">⏳ حضر ولم يسدد</span><span class="kpi-value" style="color:var(--danger);">${unpaidPresentCount}</span></div>
+            `;
+
+            if (!gStudents.length) {
+                listBox.innerHTML = `<div class="today-empty-box">لا يوجد طلاب في هذه المجموعة بعد. اضغط على «➕ إضافة طالب» بالأعلى.</div>`;
+                return;
+            }
+
+            listBox.innerHTML = gStudents.map((student, idx) => {
+                const isAtt = Boolean(student.attendanceSessions && student.attendanceSessions[curIdx]);
+                const isPaid = Boolean(student.paidSessions && student.paidSessions[curIdx]);
+                const isMonthly = student.paymentMode === 'monthly';
+
+                let payBtnHtml = '';
+                let rowUnpaid = false;
+
+                if (isMonthly) {
+                    const m = getStudentMonthlyState(student);
+                    if (m.isDue) {
+                        rowUnpaid = isAtt;
+                        payBtnHtml = `<button type="button" class="daily-toggle-btn pay-monthly-due" onclick="openMonthlyPayModal('${student.id}')">🔔 مستحق شهر (${m.attendedSincePay}/4)</button>`;
+                    } else {
+                        payBtnHtml = `<button type="button" class="daily-toggle-btn pay-monthly-ok" onclick="openMonthlyPayModal('${student.id}')" title="اشتراك شهري ساري">💳 شهري (${m.attendedSincePay}/4) ✓</button>`;
+                    }
+                } else {
+                    if (isPaid) {
+                        payBtnHtml = `<button type="button" class="daily-toggle-btn pay-yes" onclick="toggleSessionPay('${student.id}', ${curIdx}, false)">💵 دفع (${fee} ج)</button>`;
+                    } else if (isAtt) {
+                        rowUnpaid = true;
+                        payBtnHtml = `<button type="button" class="daily-toggle-btn pay-no" onclick="toggleSessionPay('${student.id}', ${curIdx}, true)">⏳ لم يدفع</button>`;
+                    } else {
+                        payBtnHtml = `<button type="button" class="daily-toggle-btn pay-muted" onclick="toggleSessionPay('${student.id}', ${curIdx}, true)" title="الطالب غائب اليوم">غائب —</button>`;
+                    }
+                }
+
+                const rowClass = rowUnpaid ? 'is-unpaid' : (isAtt ? 'is-present' : '');
+
+                return `
+                    <div class="daily-row ${rowClass}">
+                        <div class="daily-student-info">
+                            <span class="daily-num">${idx + 1}</span>
+                            <div>
+                                <button type="button" class="student-name-btn" onclick="openStudentArchiveModal('${student.id}')" title="اضغط لفتح أرشيف الطالب">
+                                    ${escHtml(student.name)}
+                                </button>
+                                <div style="font-size:11px; color:var(--muted); font-weight:700; margin-top:2px;">
+                                    ${isMonthly ? '💳 نظام شهري' : '💵 نظام بالحصة'}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="daily-controls">
+                            <button type="button" class="daily-toggle-btn ${isAtt ? 'att-yes' : 'att-no'}" onclick="toggleSessionAtt('${student.id}', ${curIdx}, ${!isAtt})">
+                                ${isAtt ? '✅ حاضر' : '❌ غائب'}
+                            </button>
+                            ${payBtnHtml}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
 
         window.onload = () => {
             migrateAndNormalizeData();
