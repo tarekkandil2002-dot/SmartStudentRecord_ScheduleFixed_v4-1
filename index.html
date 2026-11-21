@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>سجل الطلاب الذكي - الإصدار 9.6</title>
+    <title>سجل الطلاب الذكي - الإصدار 9.9</title>
 
     <meta name="theme-color" content="#1d4ed8">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -695,7 +695,7 @@
             .form-grid { grid-template-columns: 1fr; }
         }
 
-        /* ===== الإصدار 9.6 — اللوحة المختصرة التلقائية + الشيت الأساسي الكبير ===== */
+        /* ===== الإصدار 9.9 — اللوحة المختصرة التلقائية + الشيت الأساسي الكبير ===== */
         .auto-dashboard {
             background: #fff;
             border: 1px solid #dbeafe;
@@ -786,7 +786,7 @@
         }
 
 
-        /* ===== الإصدار 9.6 — لوحة حصص اليوم + النظام اليومي السريع ===== */
+        /* ===== الإصدار 9.9 — لوحة حصص اليوم + النظام اليومي السريع ===== */
         .today-panel {
             background: linear-gradient(135deg, #fff7ed 0%, #ffffff 55%, #eff6ff 100%);
             border: 2px solid #93c5fd;
@@ -1025,7 +1025,7 @@
         }
 
 
-        /* ===== الإصدار 9.6 — التصميم الزجاجي الفاخر (Glassmorphism UI) ===== */
+        /* ===== الإصدار 9.9 — التصميم الزجاجي الفاخر (Glassmorphism UI) ===== */
         body {
             background:
                 radial-gradient(circle at 12% 14%, rgba(56, 189, 248, 0.32) 0%, transparent 42%),
@@ -1241,7 +1241,7 @@
         }
 
 
-        /* ===== الإصدار 9.6 — خانات (دفع / ما دفعش) بجانب تاريخ الدفع الشهري ===== */
+        /* ===== الإصدار 9.9 — خانات (دفع / ما دفعش) بجانب تاريخ الدفع الشهري ===== */
         .mp-date-status-row {
             grid-column: 1 / -1;
             display: grid;
@@ -1301,7 +1301,7 @@
         }
 
 
-        /* ===== الإصدار 9.6 — شريط الاسم المختصر القابل للتعديل ===== */
+        /* ===== الإصدار 9.9 — شريط الاسم المختصر القابل للتعديل ===== */
         .teacher-name-bar {
             background: rgba(255, 255, 255, 0.68);
             backdrop-filter: blur(18px) saturate(165%);
@@ -1347,7 +1347,7 @@
         }
 
 
-        /* ===== الإصدار 9.6 — ترتيب الأيقونات والأزرار جنب بعض بشكل متناسق ===== */
+        /* ===== الإصدار 9.9 — ترتيب الأيقونات والأزرار جنب بعض بشكل متناسق ===== */
         .navbar {
             padding: 10px 16px;
             gap: 10px;
@@ -1462,26 +1462,390 @@
             }
         }
 
+
+        /* ===== الإصدار 9.9 — صف واحد متناسق للأيقونات السبع في أعلى الشاشة ===== */
+        .nav-actions {
+            display: grid !important;
+            grid-template-columns: repeat(7, minmax(0, 1fr));
+            gap: 6px;
+            width: 100%;
+            max-width: 720px;
+            overflow: visible !important;
+            padding: 0;
+        }
+        .btn-nav {
+            display: flex !important;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            padding: 7px 4px !important;
+            border-radius: 13px !important;
+            min-width: 0;
+            width: 100%;
+            text-align: center;
+        }
+        .btn-nav .nav-ico {
+            font-size: 17px;
+            line-height: 1;
+        }
+        .btn-nav .nav-lbl {
+            font-size: 11px;
+            font-weight: 800;
+            line-height: 1.15;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 8px 10px 10px !important;
+                gap: 8px !important;
+            }
+            .brand-box h1 {
+                font-size: 18px;
+            }
+            .nav-actions {
+                gap: 4px;
+                max-width: 100%;
+            }
+            .btn-nav {
+                padding: 6px 2px !important;
+                border-radius: 11px !important;
+                gap: 2px;
+            }
+            .btn-nav .nav-ico {
+                font-size: 16px;
+            }
+            .btn-nav .nav-lbl {
+                font-size: 9.5px;
+            }
+        }
+
+
+        /* ===== الإصدار 9.9 — العنوان والإصدار في المنتصف + 6 أيقونات (3 فوق و 3 تحت) ===== */
+        .navbar {
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 12px 16px 14px !important;
+            gap: 12px !important;
+        }
+        .brand-box {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 10px;
+            width: 100%;
+            text-align: center;
+        }
+        .brand-box h1 {
+            font-size: 21px !important;
+            margin: 0;
+        }
+        .nav-actions {
+            display: grid !important;
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+            gap: 8px !important;
+            width: 100%;
+            max-width: 560px !important;
+            margin: 0 auto;
+        }
+        .btn-nav {
+            padding: 9px 6px !important;
+            border-radius: 14px !important;
+            gap: 4px !important;
+        }
+        .btn-nav .nav-ico {
+            font-size: 20px !important;
+        }
+        .btn-nav .nav-lbl {
+            font-size: 12px !important;
+            font-weight: 800;
+        }
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 10px 12px 12px !important;
+                gap: 10px !important;
+            }
+            .brand-box h1 {
+                font-size: 19px !important;
+            }
+            .nav-actions {
+                gap: 7px !important;
+                max-width: 100% !important;
+            }
+            .btn-nav {
+                padding: 8px 4px !important;
+                border-radius: 12px !important;
+            }
+            .btn-nav .nav-ico {
+                font-size: 18px !important;
+            }
+            .btn-nav .nav-lbl {
+                font-size: 11px !important;
+            }
+        }
+
+
+        /* ===== الإصدار 9.9 — الهيدر النظيف + القائمة الجانبية بالضغط على اللوجو ===== */
+        .navbar.navbar-v99 {
+            flex-direction: row !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            padding: 10px 16px !important;
+            gap: 10px !important;
+        }
+        .brand-box-v99 {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex: 1;
+            text-align: center;
+            flex-wrap: wrap;
+        }
+        .brand-box-v99 h1 {
+            margin: 0;
+            font-size: 20px !important;
+            font-weight: 900;
+            color: #fff;
+        }
+        .logo-menu-btn {
+            position: relative;
+            border: 1.5px solid rgba(255, 255, 255, 0.55);
+            background: rgba(255, 255, 255, 0.22);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+            transition: 0.2s;
+            flex-shrink: 0;
+            padding: 0;
+        }
+        .logo-menu-btn:hover {
+            transform: scale(1.06);
+            background: rgba(255, 255, 255, 0.34);
+        }
+        .logo-menu-btn:active {
+            transform: scale(0.95);
+        }
+        .logo-circle {
+            font-size: 24px;
+            line-height: 1;
+        }
+        .logo-menu-badge {
+            position: absolute;
+            bottom: -3px;
+            left: -3px;
+            background: #2563eb;
+            color: #fff;
+            border: 1.5px solid #fff;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            font-size: 10px;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Side Menu Backdrop & Drawer */
+        .side-menu-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.42);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            z-index: 950;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+        .side-menu-backdrop.open {
+            display: block;
+            opacity: 1;
+        }
+        .side-menu-drawer {
+            position: fixed;
+            top: 0;
+            right: 0;
+            height: 100vh;
+            width: 285px;
+            max-width: 82vw;
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border-left: 1px solid rgba(255, 255, 255, 0.95);
+            box-shadow: -14px 0 40px rgba(15, 23, 42, 0.22);
+            z-index: 960;
+            transform: translateX(105%);
+            transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+            display: flex;
+            flex-direction: column;
+            padding: 18px 14px;
+            overflow-y: auto;
+        }
+        .side-menu-drawer.open {
+            transform: translateX(0);
+        }
+        .side-menu-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 14px;
+            margin-bottom: 14px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .side-menu-header .logo-menu-btn {
+            background: linear-gradient(135deg, #2563eb, #4f46e5);
+            border-color: rgba(255, 255, 255, 0.8);
+            width: 44px;
+            height: 44px;
+        }
+        .side-close-btn {
+            margin-right: auto;
+            border: 0;
+            background: #f1f5f9;
+            color: #475569;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            font-size: 22px;
+            font-weight: 900;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .side-close-btn:hover { background: #fee2e2; color: var(--danger); }
+
+        .side-menu-items {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+        .side-item {
+            width: 100%;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 14px;
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 800;
+            color: #0f172a;
+            text-align: right;
+            box-shadow: 0 3px 10px rgba(15, 23, 42, 0.04);
+            transition: 0.18s;
+        }
+        .side-item:hover {
+            transform: translateX(-3px);
+            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.10);
+        }
+        .side-item .side-ico {
+            font-size: 20px;
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .side-item.item-blue { border-right: 5px solid #0284c7; }
+        .side-item.item-blue .side-ico { background: #e0f2fe; }
+        .side-item.item-red { border-right: 5px solid #e11d48; }
+        .side-item.item-red .side-ico { background: #ffe4e6; }
+        .side-item.item-teal { border-right: 5px solid #0f766e; }
+        .side-item.item-teal .side-ico { background: #ccfbf1; }
+        .side-item.item-green { border-right: 5px solid #059669; }
+        .side-item.item-green .side-ico { background: #d1fae5; }
+        .side-item.item-slate { border-right: 5px solid #475569; }
+        .side-item.item-slate .side-ico { background: #f1f5f9; }
+        .side-item.item-purple { border-right: 5px solid #6d28d9; }
+        .side-item.item-purple .side-ico { background: #ede9fe; }
+        .side-divider {
+            border: 0;
+            border-top: 1px dashed #cbd5e1;
+            margin: 4px 0;
+        }
+
     </style>
 </head>
 <body>
 
-    <header class="navbar">
-        <div class="brand-box">
-            <h1>🎓 سجل الطلاب الذكي</h1>
-            <span class="version-pill">الإصدار 9.6</span>
+    <header class="navbar navbar-v99">
+        <button type="button" class="logo-menu-btn" id="logoMenuBtn" onclick="toggleSideMenu()" title="اضغط لفتح القائمة الجانبية" aria-label="فتح القائمة الجانبية">
+            <span class="logo-circle">🎓</span>
+            <span class="logo-menu-badge">☰</span>
+        </button>
+        <div class="brand-box-v99">
+            <h1>سجل الطلاب الذكي</h1>
+            <span class="version-pill">الإصدار 9.9</span>
         </div>
-        <nav class="nav-actions">
-            <button class="btn-nav" style="background:#0284c7; border-color:#38bdf8;" onclick="openMasterSheet()">📊 الشيت الأساسي</button>
-            <button class="btn-nav green" onclick="openFinanceModal()">💰 الإجمالي العام</button>
-            <button class="btn-nav red" onclick="openTodayModal()">🔔 مواعيد اليوم</button>
-            <button class="btn-nav teal" onclick="openScheduleModal()">🗓️ جدول المجموعات</button>
-            <button class="btn-nav" onclick="exportData()">💾 نسخة احتياطية</button>
-            <button class="btn-nav purple" onclick="openSafeExitModal()">🔒 حفظ وخروج</button>
-            <button class="btn-nav" onclick="document.getElementById('importFile').click()">📂 استرجاع</button>
-            <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
-        </nav>
+        <div style="width:46px;" aria-hidden="true"></div>
+        <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
     </header>
+
+    <!-- القائمة الجانبية الزجاجية (تفتح وتغلق بالضغط على اللوجو) -->
+    <div id="sideMenuBackdrop" class="side-menu-backdrop" onclick="closeSideMenu()"></div>
+    <aside id="sideMenuDrawer" class="side-menu-drawer" aria-label="القائمة الجانبية">
+        <div class="side-menu-header">
+            <button type="button" class="logo-menu-btn" onclick="toggleSideMenu()" title="إغلاق القائمة">
+                <span class="logo-circle">🎓</span>
+            </button>
+            <div>
+                <div style="font-weight:900; font-size:17px; color:#0f172a;">سجل الطلاب الذكي</div>
+                <div style="font-size:12px; font-weight:700; color:#64748b;">اختر من القائمة</div>
+            </div>
+            <button type="button" class="side-close-btn" onclick="closeSideMenu()" aria-label="إغلاق">&times;</button>
+        </div>
+        <div class="side-menu-items">
+            <button type="button" class="side-item item-blue" onclick="selectSideMenuItem(() => openMasterSheet())">
+                <span class="side-ico">📊</span>
+                <span class="side-txt">الشيت الأساسي</span>
+            </button>
+            <button type="button" class="side-item item-red" onclick="selectSideMenuItem(() => openTodayModal())">
+                <span class="side-ico">🔔</span>
+                <span class="side-txt">مواعيد اليوم</span>
+            </button>
+            <button type="button" class="side-item item-teal" onclick="selectSideMenuItem(() => openScheduleModal())">
+                <span class="side-ico">🗓️</span>
+                <span class="side-txt">جدول المجموعات</span>
+            </button>
+            <button type="button" class="side-item item-green" onclick="selectSideMenuItem(() => openFinanceModal())">
+                <span class="side-ico">💰</span>
+                <span class="side-txt">الإجمالي العام</span>
+            </button>
+            <hr class="side-divider">
+            <button type="button" class="side-item item-slate" onclick="selectSideMenuItem(() => exportData())">
+                <span class="side-ico">💾</span>
+                <span class="side-txt">نسخة احتياطية</span>
+            </button>
+            <button type="button" class="side-item item-slate" onclick="selectSideMenuItem(() => document.getElementById('importFile').click())">
+                <span class="side-ico">📂</span>
+                <span class="side-txt">استرجاع</span>
+            </button>
+            <button type="button" class="side-item item-purple" onclick="selectSideMenuItem(() => openSafeExitModal())">
+                <span class="side-ico">🔒</span>
+                <span class="side-txt">حفظ وخروج</span>
+            </button>
+        </div>
+    </aside>
 
     <main class="container">
         <!-- ===== Dashboard View ===== -->
@@ -1952,7 +2316,7 @@
 
     <script>
         /* =====================================================================
-           سجل الطلاب الذكي - الإصدار 9.6 (إعادة هيكلة كاملة + توافق تام مع البيانات)
+           سجل الطلاب الذكي - الإصدار 9.9 (إعادة هيكلة كاملة + توافق تام مع البيانات)
            ===================================================================== */
         const WEEK_DAYS = ['السبت', 'الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'];
         const MONTHLY_LIMIT = 4;
@@ -3507,7 +3871,7 @@
             return {
                 format: BACKUP_FORMAT,
                 backupVersion: 3,
-                appVersion: '9.6',
+                appVersion: '9.9',
                 createdAt: new Date().toISOString(),
                 teacherName: getTeacherName(),
                 groups,
@@ -3585,7 +3949,7 @@
             }
         });
 
-        /* ===== اللوحة المختصرة التلقائية + الشيت الأساسي الكبير (الإصدار 9.6) ===== */
+        /* ===== اللوحة المختصرة التلقائية + الشيت الأساسي الكبير (الإصدار 9.9) ===== */
         function getStudentPaidTotal(student, group) {
             const fee = group ? (Number(group.fee) || 0) : 0;
             let total = 0;
@@ -3826,7 +4190,7 @@
             setTimeout(() => URL.revokeObjectURL(url), 1500);
         }
 
-        /* ===== لوحة حصص اليوم + النظام اليومي السريع (الإصدار 9.6) ===== */
+        /* ===== لوحة حصص اليوم + النظام اليومي السريع (الإصدار 9.9) ===== */
         function renderTodayPanel() {
             const pill = document.getElementById('todayPanelDatePill');
             const box = document.getElementById('todayPanelContent');
@@ -3976,7 +4340,7 @@
             }).join('');
         }
 
-        /* ===== الاسم القابل للتعديل (الإصدار 9.6) ===== */
+        /* ===== الاسم القابل للتعديل (الإصدار 9.9) ===== */
         const TEACHER_NAME_KEY = 'teacher_name_v1';
         const DEFAULT_TEACHER_NAME = 'Mr. Tarek Ibrahim';
 
@@ -4025,6 +4389,36 @@
             renderTeacherName();
             toggleEditTeacherName(false);
         }
+
+        /* ===== القائمة الجانبية بالضغط على اللوجو (الإصدار 9.9) ===== */
+        function toggleSideMenu() {
+            const drawer = document.getElementById('sideMenuDrawer');
+            const backdrop = document.getElementById('sideMenuBackdrop');
+            if (!drawer || !backdrop) return;
+            const isOpen = drawer.classList.contains('open');
+            if (isOpen) {
+                closeSideMenu();
+            } else {
+                drawer.classList.add('open');
+                backdrop.classList.add('open');
+            }
+        }
+
+        function closeSideMenu() {
+            const drawer = document.getElementById('sideMenuDrawer');
+            const backdrop = document.getElementById('sideMenuBackdrop');
+            if (drawer) drawer.classList.remove('open');
+            if (backdrop) backdrop.classList.remove('open');
+        }
+
+        function selectSideMenuItem(actionFn) {
+            closeSideMenu();
+            if (typeof actionFn === 'function') actionFn();
+        }
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closeSideMenu();
+        });
 
         window.onload = () => {
             migrateAndNormalizeData();
