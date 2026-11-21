@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>سجل الطلاب الذكي - الإصدار 8.0</title>
+    <title>سجل الطلاب الذكي - الإصدار 8.2</title>
     
     <meta name="theme-color" content="#4361ee">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -340,13 +340,188 @@
             .welcome-meta {display:grid}
         }
 
+
+        /* ===== الإصدار 8.2 — نظام الدفع الشهري وتنبيه الـ 4 حصص ===== */
+        .monthly-pay-cell {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            min-width: 155px;
+        }
+        .monthly-pay-date {
+            font-size: 12px;
+            color: #475569;
+            font-weight: 700;
+            background: #f1f5f9;
+            padding: 3px 8px;
+            border-radius: 8px;
+            white-space: nowrap;
+        }
+        .monthly-pay-date.empty {
+            color: #94a3b8;
+            font-weight: 600;
+        }
+        .monthly-cycle-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+        .monthly-cycle-ok {
+            background: #e0f2fe;
+            color: #0369a1;
+            border: 1px solid #bae6fd;
+        }
+        .monthly-cycle-near {
+            background: #fef3c7;
+            color: #b45309;
+            border: 1px solid #fde68a;
+        }
+        .monthly-cycle-due {
+            background: #ffe4e6;
+            color: #be123c;
+            border: 1px solid #fda4af;
+            animation: monthlyPulse 1.5s infinite;
+        }
+        @keyframes monthlyPulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.35); }
+            50% { transform: scale(1.04); box-shadow: 0 0 0 6px rgba(244, 63, 94, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); }
+        }
+        .btn-monthly-pay {
+            border: 0;
+            border-radius: 8px;
+            padding: 6px 10px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            color: #fff;
+            background: linear-gradient(135deg, #0ea5e9, #2563eb);
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2);
+            transition: 0.2s;
+            white-space: nowrap;
+        }
+        .btn-monthly-pay:hover {
+            filter: brightness(0.94);
+            transform: translateY(-1px);
+        }
+        .btn-monthly-pay.due-btn {
+            background: linear-gradient(135deg, #f43f5e, #e11d48);
+            box-shadow: 0 3px 10px rgba(225, 29, 72, 0.28);
+        }
+        .monthly-due-banner {
+            display: none;
+            background: linear-gradient(135deg, #fff1f2, #ffe4e6);
+            border: 1px solid #fda4af;
+            border-right: 6px solid #e11d48;
+            border-radius: 14px;
+            padding: 14px 18px;
+            margin-bottom: 18px;
+            color: #881337;
+            box-shadow: 0 4px 14px rgba(225, 29, 72, 0.08);
+        }
+        .monthly-due-banner-title {
+            font-weight: 800;
+            font-size: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .monthly-due-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .monthly-due-chip {
+            background: #ffffff;
+            color: #be123c;
+            border: 1px solid #fda4af;
+            border-radius: 999px;
+            padding: 6px 12px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .monthly-due-chip:hover {
+            background: #e11d48;
+            color: #ffffff;
+            border-color: #e11d48;
+        }
+        .group-due-pill {
+            display: inline-block;
+            margin-top: 8px;
+            background: #ffe4e6;
+            color: #be123c;
+            border: 1px solid #fda4af;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 800;
+        }
+        #monthlyPaymentModal .modal-content {
+            max-width: 470px;
+            text-align: right;
+            border-top: 6px solid #2563eb;
+        }
+        .monthly-toast-container {
+            position: fixed;
+            bottom: 22px;
+            left: 22px;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 390px;
+            width: calc(100% - 44px);
+        }
+        .monthly-toast {
+            background: #ffffff;
+            color: #1e293b;
+            border: 1px solid #fda4af;
+            border-right: 6px solid #e11d48;
+            border-radius: 14px;
+            padding: 14px 16px;
+            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.18);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            animation: slideInToast 0.28s ease;
+        }
+        @keyframes slideInToast {
+            from { opacity: 0; transform: translateY(18px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .monthly-toast-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+        .monthly-toast-btn {
+            border: 0;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
     </style>
     <link rel="manifest" href="manifest.json">
 </head>
 <body>
 
     <div class="navbar">
-        <div style="display:flex; flex-direction:column; align-items:flex-start; gap:3px;"><h1 style="margin:0;">🎓 سجل الطلاب الذكي</h1><span style="font-size:12px; font-weight:700; color:#dbeafe; background:rgba(255,255,255,.15); padding:3px 9px; border-radius:20px;">الإصدار 8.1</span></div>
+        <div style="display:flex; flex-direction:column; align-items:flex-start; gap:3px;"><h1 style="margin:0;">🎓 سجل الطلاب الذكي</h1><span style="font-size:12px; font-weight:700; color:#dbeafe; background:rgba(255,255,255,.15); padding:3px 9px; border-radius:20px;">الإصدار 8.2</span></div>
         <div class="nav-actions">
             <button class="btn-nav" onclick="showGlobalFinance()" style="background: var(--success); border: none;" title="حساب الإجمالي العام لجميع المجموعات">💰 الإجمالي العام</button>
             <button class="btn-nav" onclick="showReminders()" style="background: var(--danger); border: none;" title="مواعيد وتذكيرات اليوم">🔔 مواعيد اليوم</button>
@@ -412,6 +587,7 @@
                 </div>
             </div>
             
+            <div id="monthlyDueBanner" class="monthly-due-banner"></div>
             <div style="overflow-x: auto;">
                 <table>
                     <thead>
@@ -425,6 +601,7 @@
                                     <span style="font-size:11px; font-weight:bold; color:var(--primary);">🟦 دفع</span>
                                 </div>
                             </th>
+                            <th>الدفع الشهري</th>
                             <th>نسبة الحضور</th>
                             <th>التقييم</th>
                             <th>ملاحظات</th>
@@ -614,6 +791,35 @@
             <button class="btn-main" style="width:100%;margin-top:16px;background:#64748b;" onclick="closeSessionArchive()">إغلاق الأرشيف</button>
         </div>
     </div>
+    <!-- نافذة تسجيل / تجديد الدفع الشهري -->
+    <div id="monthlyPaymentModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeMonthlyPaymentModal()">&times;</span>
+            <h2 style="color: var(--primary); margin-top: 0; margin-bottom: 8px;">💳 تسجيل الدفع الشهري</h2>
+            <p id="monthlyPaymentStudentLabel" style="font-weight: 800; color: var(--dark); margin: 0 0 14px; font-size: 16px;"></p>
+            <div id="monthlyPaymentInfoBox" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; margin-bottom: 16px; font-size: 14px; line-height: 1.8;"></div>
+            
+            <input type="hidden" id="monthlyPaymentStudentId">
+            <div style="margin-bottom: 14px;">
+                <label for="monthlyPaymentDateInput" style="display: block; font-weight: 700; margin-bottom: 6px; color: var(--dark);">📅 تاريخ الدفع الشهري:</label>
+                <input type="date" id="monthlyPaymentDateInput" class="input-control" style="width: 100%; box-sizing: border-box;">
+            </div>
+            
+            <label style="display: flex; align-items: center; gap: 8px; background: #eff6ff; border: 1px solid #bfdbfe; padding: 10px 12px; border-radius: 10px; cursor: pointer; font-weight: 700; font-size: 13px; color: #1e3a8a; margin-bottom: 18px;">
+                <input type="checkbox" id="monthlyPaymentResetCycle" checked style="width: 18px; height: 18px; accent-color: var(--primary);">
+                <span>بدء دورة جديدة (تصفير عداد الـ 4 حصص من الآن)</span>
+            </label>
+            
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="btn-main" style="flex: 1; background: var(--success);" onclick="saveMonthlyPayment()">✅ حفظ الدفع الشهري</button>
+                <button class="btn-main" style="background: #fee2e2; color: #b91c1c;" onclick="clearMonthlyPayment()" title="مسح تاريخ الدفع المسجل">🗑️ مسح</button>
+                <button class="btn-main btn-back" onclick="closeMonthlyPaymentModal()">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="monthlyToastContainer" class="monthly-toast-container" aria-live="polite"></div>
+
 
     <script>
         // قراءة آمنة: قيمة تخزين تالفة لا ينبغي أن تمنع التطبيق من الفتح (صفحة بيضاء).
@@ -754,7 +960,7 @@ function editSessionDate(sessionIndex) {
         const AUTO_SAVE_FORM_KEY = 'smart_student_record_autosave_v1';
         function getAutoSaveFields() {
             return Array.from(document.querySelectorAll('input, textarea, select'))
-                .filter(el => el.id && !['importFile','globalSearch'].includes(el.id) && el.type !== 'file' && el.type !== 'hidden' && el.type !== 'checkbox' && el.type !== 'radio');
+                .filter(el => el.id && !['importFile','globalSearch','monthlyPaymentDateInput'].includes(el.id) && el.type !== 'file' && el.type !== 'hidden' && el.type !== 'checkbox' && el.type !== 'radio');
         }
 
         function saveFormDraft(el) {
@@ -792,13 +998,13 @@ function editSessionDate(sessionIndex) {
 
         document.addEventListener('input', function(e) {
             const el = e.target;
-            if (el && el.matches('input, textarea, select') && el.id && !['importFile','globalSearch'].includes(el.id) && el.type !== 'file' && el.type !== 'hidden' && el.type !== 'checkbox' && el.type !== 'radio') {
+            if (el && el.matches('input, textarea, select') && el.id && !['importFile','globalSearch','monthlyPaymentDateInput'].includes(el.id) && el.type !== 'file' && el.type !== 'hidden' && el.type !== 'checkbox' && el.type !== 'radio') {
                 saveFormDraft(el);
             }
         });
         document.addEventListener('change', function(e) {
             const el = e.target;
-            if (el && el.matches('input, textarea, select') && el.id && !['importFile','globalSearch'].includes(el.id) && el.type !== 'file' && el.type !== 'hidden' && el.type !== 'checkbox' && el.type !== 'radio') {
+            if (el && el.matches('input, textarea, select') && el.id && !['importFile','globalSearch','monthlyPaymentDateInput'].includes(el.id) && el.type !== 'file' && el.type !== 'hidden' && el.type !== 'checkbox' && el.type !== 'radio') {
                 saveFormDraft(el);
             }
         });
@@ -1073,7 +1279,7 @@ function editSessionDate(sessionIndex) {
             return {
                 format: BACKUP_FORMAT,
                 backupVersion: BACKUP_VERSION,
-                appVersion: '8.1',
+                appVersion: '8.2',
                 createdAt: new Date().toISOString(),
                 groups: groups,
                 students: students,
@@ -1552,6 +1758,7 @@ function editSessionDate(sessionIndex) {
             if (event.target == document.getElementById('remindersModal')) closeReminders();
             if (event.target == document.getElementById('globalFinanceModal')) closeGlobalFinance();
             if (event.target == document.getElementById('leaderboardModal')) closeLeaderboard();
+            if (event.target == document.getElementById('monthlyPaymentModal')) closeMonthlyPaymentModal();
         }
 
         function renderDashboard() {
@@ -1591,6 +1798,7 @@ function editSessionDate(sessionIndex) {
                         <p>${group.grade}</p>
                         <p style="direction: ltr;">⏰ ${displaySchedule}</p>
                         <div class="session-badge">الحصة ${currentSession}</div>
+                        ${(() => { const dueCount = groupStudents.filter(st => getMonthlyPaymentStatus(st).isDue).length; return dueCount > 0 ? `<div class="group-due-pill">🔔 مستحق دفع شهري: ${dueCount}</div>` : ''; })()}
                         <hr style="border: 0; border-top: 1px solid #edf2f7; margin: 15px 0;">
                         <p style="color: var(--primary);">👥 الطلاب: ${groupStudents.length}</p>
                     </div>
@@ -1684,12 +1892,139 @@ function editSessionDate(sessionIndex) {
             }
         }
 
+        // --- حفظ ملاحظة الطالب ---
+        function updateStudentNote(studentId, value) {
+            const student = students.find(s => s.id === studentId);
+            if (student) {
+                student.note = value;
+                saveStorage();
+            }
+        }
+
+        // --- نظام الدفع الشهري ومتابعة دورة الـ 4 حصص (الإصدار 8.2) ---
+        const MONTHLY_CYCLE_LIMIT = 4;
+
+        function getStudentTotalAttended(student) {
+            const arrCount = Array.isArray(student.attendanceSessions)
+                ? student.attendanceSessions.filter(Boolean).length
+                : 0;
+            return (Number(student.attendedSessions) || 0) + arrCount;
+        }
+
+        function getMonthlyPaymentStatus(student) {
+            const totalAttended = getStudentTotalAttended(student);
+            const hasBase = typeof student.monthlyCycleBaseAttended === 'number' && !Number.isNaN(student.monthlyCycleBaseAttended);
+            const base = hasBase ? student.monthlyCycleBaseAttended : 0;
+            const classesInCycle = Math.max(0, totalAttended - base);
+            const isDue = classesInCycle >= MONTHLY_CYCLE_LIMIT;
+            const isNear = classesInCycle === MONTHLY_CYCLE_LIMIT - 1;
+            return {
+                paymentDate: student.monthlyPaymentDate || '',
+                classesInCycle,
+                totalAttended,
+                isDue,
+                isNear
+            };
+        }
+
+        function showMonthlyDueToast(student, classesInCycle) {
+            const container = document.getElementById('monthlyToastContainer');
+            if (!container) return;
+
+            playBeep();
+            if ('Notification' in window && Notification.permission === 'granted') {
+                try {
+                    new Notification('🔔 تنبيه الدفع الشهري', {
+                        body: `الطالب "${student.name}" أتم ${classesInCycle} حصص ومستحق عليه الدفع الشهري.`
+                    });
+                } catch (e) {}
+            }
+
+            const toast = document.createElement('div');
+            toast.className = 'monthly-toast';
+            toast.innerHTML = `
+                <div style="font-weight: 800; color: #be123c; font-size: 14px;">🔔 تنبيه استحقاق الدفع الشهري</div>
+                <div style="font-size: 13px; line-height: 1.6;">
+                    الطالب <strong>${escapeHtmlArchive(student.name)}</strong> أتم <strong>${classesInCycle} حصص</strong> ومستحق عليه تجديد الدفع الشهري الآن.
+                </div>
+                <div class="monthly-toast-actions">
+                    <button class="monthly-toast-btn" style="background: #e11d48; color: #fff;" onclick="openMonthlyPaymentModal('${student.id}'); this.closest('.monthly-toast').remove();">💳 تسجيل الدفع</button>
+                    <button class="monthly-toast-btn" style="background: #f1f5f9; color: #475569;" onclick="this.closest('.monthly-toast').remove();">حسناً</button>
+                </div>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => {
+                if (toast && toast.parentNode) toast.remove();
+            }, 9000);
+        }
+
+        function openMonthlyPaymentModal(studentId) {
+            const student = students.find(s => s.id === studentId);
+            if (!student) return;
+            const status = getMonthlyPaymentStatus(student);
+
+            document.getElementById('monthlyPaymentStudentId').value = student.id;
+            document.getElementById('monthlyPaymentStudentLabel').innerText = `👤 الطالب: ${student.name}`;
+            document.getElementById('monthlyPaymentInfoBox').innerHTML = `
+                <div>📅 <strong>آخر تاريخ دفع شهري:</strong> ${status.paymentDate || 'لم يُسجل بعد'}</div>
+                <div>📊 <strong>الحصص المكتملة في الدورة الحالية:</strong> ${status.classesInCycle} / ${MONTHLY_CYCLE_LIMIT} حصص ${status.isDue ? '<span style="color:#be123c;font-weight:800;">(🔔 مستحق دفع شهري)</span>' : ''}</div>
+            `;
+            document.getElementById('monthlyPaymentDateInput').value = localDateString();
+            document.getElementById('monthlyPaymentResetCycle').checked = true;
+            document.getElementById('monthlyPaymentModal').style.display = 'block';
+        }
+
+        function closeMonthlyPaymentModal() {
+            const modal = document.getElementById('monthlyPaymentModal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function saveMonthlyPayment() {
+            const studentId = document.getElementById('monthlyPaymentStudentId').value;
+            const dateVal = document.getElementById('monthlyPaymentDateInput').value;
+            const resetCycle = document.getElementById('monthlyPaymentResetCycle').checked;
+
+            if (!parseLocalDate(dateVal)) {
+                alert('برجاء اختيار تاريخ دفع صحيح.');
+                return;
+            }
+            const student = students.find(s => s.id === studentId);
+            if (!student) return;
+
+            student.monthlyPaymentDate = dateVal;
+            if (resetCycle) {
+                student.monthlyCycleBaseAttended = getStudentTotalAttended(student);
+            }
+            saveStorage();
+            closeMonthlyPaymentModal();
+            renderTable();
+        }
+
+        function clearMonthlyPayment() {
+            const studentId = document.getElementById('monthlyPaymentStudentId').value;
+            const student = students.find(s => s.id === studentId);
+            if (!student) return;
+            if (!confirm(`هل تريد مسح تاريخ الدفع الشهري المسجل للطالب "${student.name}"؟`)) return;
+            student.monthlyPaymentDate = '';
+            delete student.monthlyCycleBaseAttended;
+            saveStorage();
+            closeMonthlyPaymentModal();
+            renderTable();
+        }
+
         function updateAttSession(studentId, sessionIndex, isChecked) {
             const student = students.find(s => s.id === studentId);
             if (student) {
+                const beforeStatus = getMonthlyPaymentStatus(student);
                 if (!student.attendanceSessions) student.attendanceSessions = [false, false, false, false];
                 while (student.attendanceSessions.length <= sessionIndex) student.attendanceSessions.push(false);
-                student.attendanceSessions[sessionIndex] = isChecked; saveStorage(); renderTable(); 
+                student.attendanceSessions[sessionIndex] = isChecked;
+                const afterStatus = getMonthlyPaymentStatus(student);
+                saveStorage();
+                renderTable();
+                if (isChecked && beforeStatus.classesInCycle < MONTHLY_CYCLE_LIMIT && afterStatus.classesInCycle >= MONTHLY_CYCLE_LIMIT) {
+                    showMonthlyDueToast(student, afterStatus.classesInCycle);
+                }
             }
         }
         
@@ -1739,6 +2074,15 @@ function editSessionDate(sessionIndex) {
             msg += `- إجمالي الحضور: حضر ${monthAttended} من أصل ${currentSession} حصص.\n`;
             msg += `- إجمالي المدفوع: سدد ${paidCount} حصص.\n\n`;
             
+            const mWa = getMonthlyPaymentStatus(student);
+            if (mWa.paymentDate || mWa.isDue) {
+                msg += `*💳 موقف الدفع الشهري:*\n`;
+                if (mWa.paymentDate) msg += `- تاريخ آخر دفع شهري: ${mWa.paymentDate}\n`;
+                msg += `- الحصص في الدورة الحالية: ${mWa.classesInCycle} من ${MONTHLY_CYCLE_LIMIT} حصص\n`;
+                if (mWa.isDue) msg += `- 🔔 تنبيه: أتم الطالب ${mWa.classesInCycle} حصص ومستحق عليه تجديد الدفع الشهري.\n`;
+                msg += `\n`;
+            }
+
             if (student.points && student.points > 0) {
                 msg += `*🏆 التقييم والمكافآت:*\n`;
                 msg += `- حصل الطالب على ${student.points} نقطة ⭐️ (مستوى ممتاز!)\n\n`;
@@ -1790,7 +2134,9 @@ function editSessionDate(sessionIndex) {
                 points: 0,
                 note: "",
                 totalSessions: 0,
-                attendedSessions: 0
+                attendedSessions: 0,
+                monthlyPaymentDate: "",
+                monthlyCycleBaseAttended: 0
             };
 
             students.push(newStudent);
@@ -1825,7 +2171,28 @@ function editSessionDate(sessionIndex) {
             document.getElementById('todayMoneyText').innerText = todayPaidCount * (group.fee || 0);
             
             if (groupStudents.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" style="color: var(--gray); padding: 20px;">لا يوجد طلاب مسجلين هنا.</td></tr>`; return;
+                const dueBannerEmpty = document.getElementById('monthlyDueBanner');
+                if (dueBannerEmpty) { dueBannerEmpty.style.display = 'none'; dueBannerEmpty.innerHTML = ''; }
+                tbody.innerHTML = `<tr><td colspan="8" style="color: var(--gray); padding: 20px;">لا يوجد طلاب مسجلين هنا.</td></tr>`; return;
+            }
+
+            const dueStudentsList = groupStudents.filter(st => getMonthlyPaymentStatus(st).isDue);
+            const dueBanner = document.getElementById('monthlyDueBanner');
+            if (dueBanner) {
+                if (dueStudentsList.length > 0) {
+                    dueBanner.style.display = 'block';
+                    const chipsHtml = dueStudentsList.map(st => {
+                        const mSt = getMonthlyPaymentStatus(st);
+                        return `<button type="button" class="monthly-due-chip" onclick="openMonthlyPaymentModal('${st.id}')" title="اضغط لتسجيل الدفع الشهري">🔔 ${escapeHtmlArchive(st.name)} (${mSt.classesInCycle}/${MONTHLY_CYCLE_LIMIT} حصص) — تسجيل الدفع</button>`;
+                    }).join('');
+                    dueBanner.innerHTML = `
+                        <div class="monthly-due-banner-title">🔔 تنبيه الدفع الشهري: يوجد (${dueStudentsList.length}) طالب/طلاب أتمّوا 4 حصص ومستحق عليهم الدفع الشهري:</div>
+                        <div class="monthly-due-chips">${chipsHtml}</div>
+                    `;
+                } else {
+                    dueBanner.style.display = 'none';
+                    dueBanner.innerHTML = '';
+                }
             }
 
             groupStudents.forEach((student) => {
@@ -1839,7 +2206,7 @@ function editSessionDate(sessionIndex) {
                 let badgeClass = totalSes === 0 ? 'badge-med' : (numPerc >= 85 ? 'badge-high' : (numPerc < 50 ? 'badge-low' : 'badge-med'));
                 
                 const hasUnpaidSessions = student.attendanceSessions.slice(0, currentSession).some((present, idx) => present && !student.paidSessions[idx]);
-                const isUnpaidWarning = hasUnpaidSessions;
+                const isUnpaidWarning = hasUnpaidSessions || getMonthlyPaymentStatus(student).isDue;
                 const alertIcon = isUnpaidWarning ? `<span title="يوجد حصص غير مسددة!" style="color: #f72585; font-size: 14px; margin-right: 5px;">⚠️</span>` : '';
                 
                 let sessionsHtml = '';
@@ -1866,6 +2233,25 @@ function editSessionDate(sessionIndex) {
                         </td>
                         <td>
                             <div class="sessions-tracker">${sessionsHtml}</div>
+                        </td>
+                        <td>
+                            ${(() => {
+                                const mStatus = getMonthlyPaymentStatus(student);
+                                const cycleClass = mStatus.isDue ? 'monthly-cycle-due' : (mStatus.isNear ? 'monthly-cycle-near' : 'monthly-cycle-ok');
+                                const cycleLabel = mStatus.isDue
+                                    ? `🔔 مستحق دفع شهري (${mStatus.classesInCycle}/${MONTHLY_CYCLE_LIMIT})`
+                                    : `${mStatus.classesInCycle} / ${MONTHLY_CYCLE_LIMIT} حصص`;
+                                const dateHtml = mStatus.paymentDate
+                                    ? `<span class="monthly-pay-date">📅 ${mStatus.paymentDate}</span>`
+                                    : `<span class="monthly-pay-date empty">لم يُسجل بعد</span>`;
+                                const btnLabel = mStatus.paymentDate ? '🔄 تجديد الشهر' : '💳 تسجيل دفع شهري';
+                                const btnClass = mStatus.isDue ? 'btn-monthly-pay due-btn' : 'btn-monthly-pay';
+                                return `<div class="monthly-pay-cell">
+                                    ${dateHtml}
+                                    <span class="monthly-cycle-badge ${cycleClass}">${cycleLabel}</span>
+                                    <button type="button" class="${btnClass}" onclick="openMonthlyPaymentModal('${student.id}')">${btnLabel}</button>
+                                </div>`;
+                            })()}
                         </td>
                         <td><span class="badge ${badgeClass}" title="حضر ${totalAtt} حصة من أصل ${totalSes} حصة حتى الآن">${totalSes === 0 ? "جديد" : numPerc + "%"}<br><small style="font-size:10px;font-weight:500">${totalAtt}/${totalSes} حصة</small></span></td>
                         <td>
