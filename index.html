@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>سجل الطلاب الذكي - الإصدار 9.3</title>
+    <title>سجل الطلاب الذكي - الإصدار 9.5</title>
 
     <meta name="theme-color" content="#1d4ed8">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -695,7 +695,7 @@
             .form-grid { grid-template-columns: 1fr; }
         }
 
-        /* ===== الإصدار 9.3 — اللوحة المختصرة التلقائية + الشيت الأساسي الكبير ===== */
+        /* ===== الإصدار 9.5 — اللوحة المختصرة التلقائية + الشيت الأساسي الكبير ===== */
         .auto-dashboard {
             background: #fff;
             border: 1px solid #dbeafe;
@@ -786,7 +786,7 @@
         }
 
 
-        /* ===== الإصدار 9.3 — لوحة حصص اليوم + النظام اليومي السريع ===== */
+        /* ===== الإصدار 9.5 — لوحة حصص اليوم + النظام اليومي السريع ===== */
         .today-panel {
             background: linear-gradient(135deg, #fff7ed 0%, #ffffff 55%, #eff6ff 100%);
             border: 2px solid #93c5fd;
@@ -1025,7 +1025,7 @@
         }
 
 
-        /* ===== الإصدار 9.3 — التصميم الزجاجي الفاخر (Glassmorphism UI) ===== */
+        /* ===== الإصدار 9.5 — التصميم الزجاجي الفاخر (Glassmorphism UI) ===== */
         body {
             background:
                 radial-gradient(circle at 12% 14%, rgba(56, 189, 248, 0.32) 0%, transparent 42%),
@@ -1240,6 +1240,112 @@
             background: rgba(255, 255, 255, 0.84);
         }
 
+
+        /* ===== الإصدار 9.5 — خانات (دفع / ما دفعش) بجانب تاريخ الدفع الشهري ===== */
+        .mp-date-status-row {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            align-items: end;
+        }
+        .mp-date-status-row .form-control {
+            width: 100%;
+            min-width: 0;
+        }
+        .mp-status-boxes {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+        .mp-status-box {
+            border: 1.5px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 10px 6px;
+            font-size: 13px;
+            font-weight: 800;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.85);
+            color: #475569;
+            text-align: center;
+            transition: 0.18s;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            min-height: 43px;
+        }
+        .mp-status-box:hover { transform: translateY(-1px); }
+        .mp-status-box.active-paid {
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-color: #059669;
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.28);
+        }
+        .mp-status-box.active-unpaid {
+            background: linear-gradient(135deg, #f43f5e, #e11d48);
+            border-color: #e11d48;
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(225, 29, 72, 0.28);
+        }
+        @media (max-width: 400px) {
+            .mp-date-status-row {
+                grid-template-columns: 1fr 1.1fr;
+                gap: 8px;
+            }
+            .mp-status-box {
+                font-size: 12px;
+                padding: 9px 4px;
+            }
+        }
+
+
+        /* ===== الإصدار 9.5 — شريط الاسم المختصر القابل للتعديل ===== */
+        .teacher-name-bar {
+            background: rgba(255, 255, 255, 0.68);
+            backdrop-filter: blur(18px) saturate(165%);
+            -webkit-backdrop-filter: blur(18px) saturate(165%);
+            border: 1px solid rgba(255, 255, 255, 0.85);
+            box-shadow: 0 8px 24px rgba(30, 58, 138, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            border-radius: 16px;
+            padding: 12px 18px;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .teacher-name-view {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+        .teacher-name-title {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 18px;
+            font-weight: 900;
+            color: var(--dark);
+            cursor: pointer;
+        }
+        .teacher-name-edit {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+        .teacher-name-edit input {
+            flex: 1;
+            min-width: 180px;
+        }
+
     </style>
 </head>
 <body>
@@ -1247,7 +1353,7 @@
     <header class="navbar">
         <div class="brand-box">
             <h1>🎓 سجل الطلاب الذكي</h1>
-            <span class="version-pill">الإصدار 9.3</span>
+            <span class="version-pill">الإصدار 9.5</span>
         </div>
         <nav class="nav-actions">
             <button class="btn-nav" style="background:#0284c7; border-color:#38bdf8;" onclick="openMasterSheet()">📊 الشيت الأساسي</button>
@@ -1264,18 +1370,18 @@
     <main class="container">
         <!-- ===== Dashboard View ===== -->
         <section id="dashboardView">
-            <div class="welcome-banner">
-                <div class="welcome-text">
-                    <div class="eyebrow">مرحباً بك يا مستر طارق 👋</div>
-                    <h2>سجل الطلاب <span>الذكي</span></h2>
-                    <p>إدارة أسهل .. متابعة أدق .. ومواعيد منظمة بالكامل</p>
-                    <div class="welcome-chips">
-                        <span>👨‍🏫 Mr. Tarek Ibrahim</span>
-                        <span>📅 حصة واحدة أسبوعياً (4 حصص شهرياً)</span>
-                        <span>💳 دفع بالحصة أو بالشهر</span>
-                    </div>
+            <div class="teacher-name-bar">
+                <div id="teacherNameView" class="teacher-name-view">
+                    <span class="teacher-name-title" onclick="toggleEditTeacherName(true)" title="اضغط لتعديل الاسم">
+                        👨‍🏫 <span id="teacherNameDisplay">Mr. Tarek Ibrahim</span>
+                    </span>
+                    <button type="button" class="btn btn-sm btn-ghost" onclick="toggleEditTeacherName(true)">✏️ تعديل الاسم</button>
                 </div>
-                <div class="welcome-icons" aria-hidden="true">🎓📚✏️</div>
+                <div id="teacherNameEdit" class="teacher-name-edit">
+                    <input type="text" id="teacherNameInput" class="form-control" placeholder="اكتب اسم المدرس..." onkeydown="if(event.key==='Enter') saveTeacherName();">
+                    <button type="button" class="btn btn-sm btn-success" onclick="saveTeacherName()">✅ حفظ</button>
+                    <button type="button" class="btn btn-sm btn-ghost" onclick="toggleEditTeacherName(false)">إلغاء</button>
+                </div>
             </div>
             <!-- لوحة حصص اليوم (تظهر مجموعات النهاردة تلقائياً) -->
             <div class="today-panel">
@@ -1595,11 +1701,21 @@
             <div id="mpStatusBox" style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:12px; margin-bottom:14px; font-size:13px; line-height:1.8;"></div>
             <input type="hidden" id="mpStudentId">
             <div class="form-grid">
-                <div class="form-group">
-                    <label>📅 تاريخ الدفع الشهري</label>
-                    <input type="date" id="mpDateInput" class="form-control">
+                <div class="mp-date-status-row">
+                    <div class="form-group">
+                        <label>📅 تاريخ الدفع الشهري</label>
+                        <input type="date" id="mpDateInput" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>📌 حالة الدفع</label>
+                        <input type="hidden" id="mpPaidStatus" value="paid">
+                        <div class="mp-status-boxes">
+                            <button type="button" id="mpBtnPaid" class="mp-status-box active-paid" onclick="setMonthlyPaidStatus('paid')">✅ دفع</button>
+                            <button type="button" id="mpBtnUnpaid" class="mp-status-box" onclick="setMonthlyPaidStatus('unpaid')">❌ ما دفعش</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group full">
                     <label>💰 المبلغ المدفوع (جنيه)</label>
                     <input type="number" id="mpAmountInput" class="form-control" min="0" step="1">
                 </div>
@@ -1720,7 +1836,7 @@
 
     <script>
         /* =====================================================================
-           سجل الطلاب الذكي - الإصدار 9.3 (إعادة هيكلة كاملة + توافق تام مع البيانات)
+           سجل الطلاب الذكي - الإصدار 9.5 (إعادة هيكلة كاملة + توافق تام مع البيانات)
            ===================================================================== */
         const WEEK_DAYS = ['السبت', 'الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'];
         const MONTHLY_LIMIT = 4;
@@ -2053,6 +2169,7 @@
             document.getElementById('groupView').style.display = 'none';
             const msView = document.getElementById('masterSheetView');
             if (msView) msView.style.display = 'none';
+            renderTeacherName();
             renderTodayPanel();
             renderAutoDashboard();
             document.getElementById('globalSearch').value = '';
@@ -2607,6 +2724,21 @@
         }
 
         /* ===== Monthly Payment Modal ===== */
+        function setMonthlyPaidStatus(status) {
+            const val = status === 'unpaid' ? 'unpaid' : 'paid';
+            const hidden = document.getElementById('mpPaidStatus');
+            const btnPaid = document.getElementById('mpBtnPaid');
+            const btnUnpaid = document.getElementById('mpBtnUnpaid');
+            const dateInp = document.getElementById('mpDateInput');
+            const amtInp = document.getElementById('mpAmountInput');
+
+            if (hidden) hidden.value = val;
+            if (btnPaid) btnPaid.classList.toggle('active-paid', val === 'paid');
+            if (btnUnpaid) btnUnpaid.classList.toggle('active-unpaid', val === 'unpaid');
+            if (dateInp) dateInp.disabled = (val === 'unpaid');
+            if (amtInp) amtInp.disabled = (val === 'unpaid');
+        }
+
         function openMonthlyPayModal(studentId) {
             const student = students.find(s => s.id === studentId);
             if (!student) return;
@@ -2619,27 +2751,44 @@
             document.getElementById('mpStatusBox').innerHTML = `
                 <div>📅 <strong>آخر اشتراك شهري:</strong> ${m.paymentDate || 'لم يُسجل بعد'}</div>
                 <div>📊 <strong>حصص الحضور في الدورة الحالية:</strong> ${m.attendedSincePay} / ${MONTHLY_LIMIT} حصص</div>
+                <div>📌 <strong>الحالة الحالية:</strong> ${m.hasActiveSub && !m.isDue ? '<span style="color:var(--success);font-weight:900;">✅ دافع ومنتظم</span>' : '<span style="color:var(--danger);font-weight:900;">❌ ما دفعش / مستحق تجديد</span>'}</div>
             `;
-            document.getElementById('mpDateInput').value = localDateString();
+            document.getElementById('mpDateInput').value = m.paymentDate || localDateString();
             document.getElementById('mpAmountInput').value = defaultAmount;
             document.getElementById('mpResetCycle').checked = true;
+            setMonthlyPaidStatus(m.hasActiveSub && !m.isDue ? 'paid' : 'unpaid');
             document.getElementById('monthlyPayModal').style.display = 'block';
         }
 
         function saveMonthlyPayment() {
             const sid = document.getElementById('mpStudentId').value;
+            const paidStatus = document.getElementById('mpPaidStatus') ? document.getElementById('mpPaidStatus').value : 'paid';
             const dateVal = document.getElementById('mpDateInput').value;
             const amount = parseFloat(document.getElementById('mpAmountInput').value) || 0;
             const resetCycle = document.getElementById('mpResetCycle').checked;
+
+            const student = students.find(s => s.id === sid);
+            if (!student) return;
+
+            student.paymentMode = 'monthly';
+
+            if (paidStatus === 'unpaid') {
+                student.monthlyPaymentDate = '';
+                delete student.monthlyCycleBaseAttended;
+                saveStorage();
+                closeModal('monthlyPayModal');
+                if (activeGroupId) renderStudentsTable();
+                if (document.getElementById('studentArchiveModal').style.display === 'block') {
+                    openStudentArchiveModal(student.id);
+                }
+                return;
+            }
 
             if (!parseLocalDate(dateVal)) {
                 alert('برجاء اختيار تاريخ دفع صحيح.');
                 return;
             }
-            const student = students.find(s => s.id === sid);
-            if (!student) return;
 
-            student.paymentMode = 'monthly';
             student.monthlyPaymentDate = dateVal;
             if (!Array.isArray(student.monthlyPaymentsHistory)) student.monthlyPaymentsHistory = [];
             student.monthlyPaymentsHistory.unshift({
@@ -3087,7 +3236,7 @@
 
             if (student.points > 0) msg += `• ⭐ نقاط التقييم: ${student.points} نقطة\n`;
             if (student.note && student.note.trim()) msg += `• 📝 ملاحظات: ${student.note.trim()}\n`;
-            msg += `\nمع تحيات مستر طارق قنديل.`;
+            msg += `\nمع تحيات ${getTeacherName()}.`;
 
             window.open(`https://wa.me/${phoneNum}?text=${encodeURIComponent(msg)}`, '_blank');
         }
@@ -3242,8 +3391,9 @@
             return {
                 format: BACKUP_FORMAT,
                 backupVersion: 3,
-                appVersion: '9.3',
+                appVersion: '9.5',
                 createdAt: new Date().toISOString(),
+                teacherName: getTeacherName(),
                 groups,
                 students
             };
@@ -3288,6 +3438,9 @@
                     downloadJSON(makeBackupObject(), 'SmartStudentRecord_BeforeRestore');
                     groups = data.groups;
                     students = data.students;
+                    if (typeof data.teacherName === 'string' && data.teacherName.trim()) {
+                        try { localStorage.setItem('teacher_name_v1', data.teacherName.trim()); } catch (e) {}
+                    }
                     if (Array.isArray(data.newGroupSchedules)) legacySchedules = data.newGroupSchedules;
                     migrateAndNormalizeData();
                     saveStorage();
@@ -3316,7 +3469,7 @@
             }
         });
 
-        /* ===== اللوحة المختصرة التلقائية + الشيت الأساسي الكبير (الإصدار 9.3) ===== */
+        /* ===== اللوحة المختصرة التلقائية + الشيت الأساسي الكبير (الإصدار 9.5) ===== */
         function getStudentPaidTotal(student, group) {
             const fee = group ? (Number(group.fee) || 0) : 0;
             let total = 0;
@@ -3557,7 +3710,7 @@
             setTimeout(() => URL.revokeObjectURL(url), 1500);
         }
 
-        /* ===== لوحة حصص اليوم + النظام اليومي السريع (الإصدار 9.3) ===== */
+        /* ===== لوحة حصص اليوم + النظام اليومي السريع (الإصدار 9.5) ===== */
         function renderTodayPanel() {
             const pill = document.getElementById('todayPanelDatePill');
             const box = document.getElementById('todayPanelContent');
@@ -3707,8 +3860,59 @@
             }).join('');
         }
 
+        /* ===== الاسم القابل للتعديل (الإصدار 9.5) ===== */
+        const TEACHER_NAME_KEY = 'teacher_name_v1';
+        const DEFAULT_TEACHER_NAME = 'Mr. Tarek Ibrahim';
+
+        function getTeacherName() {
+            try {
+                const saved = localStorage.getItem(TEACHER_NAME_KEY);
+                return (saved && saved.trim()) ? saved.trim() : DEFAULT_TEACHER_NAME;
+            } catch (e) {
+                return DEFAULT_TEACHER_NAME;
+            }
+        }
+
+        function renderTeacherName() {
+            const disp = document.getElementById('teacherNameDisplay');
+            if (disp) disp.textContent = getTeacherName();
+        }
+
+        function toggleEditTeacherName(editing) {
+            const viewEl = document.getElementById('teacherNameView');
+            const editEl = document.getElementById('teacherNameEdit');
+            const inp = document.getElementById('teacherNameInput');
+            if (!viewEl || !editEl) return;
+            if (editing) {
+                viewEl.style.display = 'none';
+                editEl.style.display = 'flex';
+                if (inp) {
+                    inp.value = getTeacherName();
+                    inp.focus();
+                    inp.select();
+                }
+            } else {
+                editEl.style.display = 'none';
+                viewEl.style.display = 'flex';
+            }
+        }
+
+        function saveTeacherName() {
+            const inp = document.getElementById('teacherNameInput');
+            const val = inp ? inp.value.trim() : '';
+            if (!val) {
+                alert('برجاء كتابة الاسم أولاً.');
+                return;
+            }
+            try { localStorage.setItem(TEACHER_NAME_KEY, val); } catch (e) {}
+            markBackupPending();
+            renderTeacherName();
+            toggleEditTeacherName(false);
+        }
+
         window.onload = () => {
             migrateAndNormalizeData();
+            renderTeacherName();
             renderDashboard();
         };
     </script>
