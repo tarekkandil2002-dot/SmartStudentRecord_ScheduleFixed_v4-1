@@ -993,6 +993,65 @@
         }
         .face-reg-preview video, .face-reg-preview img { width: 100%; height: 100%; object-fit: cover; }
 
+        /* ===== Voice Input for Student Name ===== */
+        .voice-input-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .voice-input-row .form-control {
+            flex: 1;
+            min-width: 0;
+        }
+        .voice-mic-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            border: 1.5px solid #93c5fd;
+            background: linear-gradient(135deg, #eff6ff, #dbeafe);
+            color: #1d4ed8;
+            font-size: 20px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: transform 0.15s ease, background 0.15s ease;
+        }
+        .voice-mic-btn:active { transform: scale(0.94); }
+        .voice-mic-btn.recording {
+            background: linear-gradient(135deg, #f43f5e, #e11d48);
+            border-color: #be123c;
+            color: #ffffff;
+            box-shadow: 0 0 0 4px rgba(225, 29, 72, 0.22);
+        }
+        .voice-status-hint {
+            font-size: 12px;
+            font-weight: 800;
+            margin-top: 4px;
+            padding: 5px 10px;
+            border-radius: 8px;
+            background: #eff6ff;
+            color: #1d4ed8;
+        }
+        .voice-status-hint.is-rec {
+            background: #fff1f2;
+            color: #be123c;
+        }
+        .voice-status-hint.is-ok {
+            background: #ecfdf5;
+            color: #065f46;
+        }
+        body.dark-mode .voice-mic-btn:not(.recording) {
+            background: rgba(30, 58, 138, 0.45);
+            border-color: rgba(96, 165, 250, 0.45);
+            color: #93c5fd;
+        }
+        body.dark-mode .voice-status-hint {
+            background: rgba(30, 41, 59, 0.85);
+            color: #93c5fd;
+        }
+
         /* Dark Mode */
         body.dark-mode {
             --dark: #f8fafc; --text: #e2e8f0; --muted: #94a3b8;
@@ -1465,7 +1524,11 @@
             <div class="form-grid">
                 <div class="form-group full">
                     <label>اسم الطالب</label>
-                    <input type="text" id="sfName" class="form-control" placeholder="اكتب اسم الطالب ثلاثي...">
+                    <div class="voice-input-row">
+                        <input type="text" id="sfName" class="form-control" placeholder="اكتب اسم الطالب أو اضغط المايك 🎤...">
+                        <button type="button" id="sfNameMicBtn" class="voice-mic-btn" onclick="toggleStudentNameVoice()" title="انطق اسم الطالب بالصوت" aria-label="إدخال اسم الطالب بالصوت">🎤</button>
+                    </div>
+                    <div id="sfVoiceStatus" class="voice-status-hint" style="display:none;"></div>
                 </div>
                 <div class="form-group">
                     <label>رقم واتساب ولي الأمر (اختياري)</label>
@@ -1919,6 +1982,7 @@
         function closeModal(id) {
             if (id === 'faceAttendanceModal') stopFaceAttCamera();
             if (id === 'faceRegisterModal') stopFaceRegCamera();
+            if (id === 'studentFormModal') stopStudentNameVoice();
             const el = document.getElementById(id);
             if (el) el.style.display = 'none';
         }
@@ -2511,8 +2575,171 @@
             return String(val || '').trim().replace(/\s+/g, ' ').replace(/[ًٌٍَُِّْـ]/g, '').replace(/[أإآ]/g, 'ا').replace(/ى/g, 'ي').toLocaleLowerCase('ar');
         }
 
+        let studentNameRec = null;
+        let isRecordingStudentName = false;
+        let sfSilenceTimer = null;
+        let sfStatusClearTimer = null;
+
+        function setSfVoiceStatus(msg, type = '', autoHideMs = 0) {
+            const el = document.getElementById('sfVoiceStatus');
+            if (!el) return;
+            clearTimeout(sfStatusClearTimer);
+            if (!msg) {
+                el.style.display = 'none';
+                el.textContent = '';
+                el.className = 'voice-status-hint';
+                return;
+            }
+            el.textContent = msg;
+            el.className = 'voice-status-hint' + (type ? ' ' + type : '');
+            el.style.display = 'block';
+            if (autoHideMs > 0) {
+                sfStatusClearTimer = setTimeout(() => setSfVoiceStatus(''), autoHideMs);
+            }
+        }
+
+        function clearSfSilenceTimer() {
+            if (sfSilenceTimer) {
+                clearTimeout(sfSilenceTimer);
+                sfSilenceTimer = null;
+            }
+        }
+
+        function stopStudentNameVoice(useGracefulStop = false) {
+            clearSfSilenceTimer();
+            const rec = studentNameRec;
+            studentNameRec = null;
+            isRecordingStudentName = false;
+            if (rec) {
+                try {
+                    if (useGracefulStop) rec.stop();
+                    else rec.abort();
+                } catch (e) {}
+            }
+            const btn = document.getElementById('sfNameMicBtn');
+            if (btn) {
+                btn.classList.remove('recording');
+                btn.textContent = '🎤';
+            }
+        }
+
+        function toggleStudentNameVoice() {
+            if (isRecordingStudentName) {
+                stopStudentNameVoice(true);
+                setSfVoiceStatus('⏹️ تم إيقاف المايك', '', 2000);
+                return;
+            }
+            const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SR) {
+                setSfVoiceStatus('⚠️ المتصفح لا يدعم الإدخال الصوتي. استخدم متصفح Chrome.', 'is-rec');
+                return;
+            }
+
+            stopNoteDictation();
+            stopStudentNameVoice(false);
+
+            const rec = new SR();
+            studentNameRec = rec;
+            rec.lang = 'ar-EG';
+            rec.interimResults = true;
+            rec.continuous = false;
+            rec.maxAlternatives = 1;
+
+            const btn = document.getElementById('sfNameMicBtn');
+            const nameInput = document.getElementById('sfName');
+            let gotSpeech = false;
+            let lastCleaned = '';
+
+            isRecordingStudentName = true;
+            if (btn) {
+                btn.classList.add('recording');
+                btn.textContent = '⏹️';
+            }
+            setSfVoiceStatus('🔴 جاري الاستماع... انطق اسم الطالب الآن (يفصل تلقائياً عند الصمت)', 'is-rec');
+
+            // يفصل المايك تلقائياً لو مفيش صوت لمدة 6 ثواني
+            const resetSilenceTimer = (ms, isAfterSpeech = false) => {
+                clearSfSilenceTimer();
+                sfSilenceTimer = setTimeout(() => {
+                    if (!isRecordingStudentName) return;
+                    if (isAfterSpeech && lastCleaned) {
+                        stopStudentNameVoice(true);
+                        setSfVoiceStatus('✅ تم كتابة الاسم: ' + lastCleaned, 'is-ok', 3500);
+                        playBeep();
+                    } else {
+                        stopStudentNameVoice(false);
+                        setSfVoiceStatus('⏱️ تم فصل المايك تلقائياً لعدم التحدث', '', 3000);
+                    }
+                }, ms);
+            };
+            resetSilenceTimer(6000, false);
+
+            rec.onspeechstart = () => {
+                gotSpeech = true;
+                resetSilenceTimer(5000, true);
+            };
+
+            rec.onresult = (ev) => {
+                gotSpeech = true;
+                let transcript = '';
+                for (let i = 0; i < ev.results.length; i++) {
+                    transcript += ev.results[i][0].transcript;
+                }
+                const cleaned = transcript.trim().replace(/[.,،؛!؟]+$/g, '').replace(/\s+/g, ' ');
+                if (nameInput && cleaned) {
+                    nameInput.value = cleaned;
+                    lastCleaned = cleaned;
+                }
+                const isFinal = ev.results[ev.results.length - 1].isFinal;
+                if (isFinal && cleaned) {
+                    stopStudentNameVoice(true);
+                    setSfVoiceStatus('✅ تم كتابة الاسم: ' + cleaned, 'is-ok', 3500);
+                    playBeep();
+                } else {
+                    // بعد آخر كلمة بـ 2.5 ثانية صمت، يقفل ويعتمد الاسم
+                    resetSilenceTimer(2500, true);
+                }
+            };
+
+            rec.onerror = (ev) => {
+                clearSfSilenceTimer();
+                if (ev.error === 'aborted') return;
+                if (ev.error === 'not-allowed') {
+                    setSfVoiceStatus('⚠️ يرجى السماح بصلاحية الميكروفون من إعدادات المتصفح.', 'is-rec');
+                } else if (ev.error === 'no-speech') {
+                    setSfVoiceStatus('⏱️ تم فصل المايك تلقائياً لعدم التحدث', '', 3000);
+                } else {
+                    setSfVoiceStatus('⚠️ تعذّر التعرف على الصوت، حاول مرة أخرى.', 'is-rec', 3000);
+                }
+                stopStudentNameVoice(false);
+            };
+
+            rec.onend = () => {
+                clearSfSilenceTimer();
+                const wasActive = isRecordingStudentName;
+                isRecordingStudentName = false;
+                studentNameRec = null;
+                if (btn) {
+                    btn.classList.remove('recording');
+                    btn.textContent = '🎤';
+                }
+                if (wasActive && !gotSpeech) {
+                    setSfVoiceStatus('⏱️ تم فصل المايك تلقائياً لعدم التحدث', '', 3000);
+                }
+            };
+
+            try {
+                rec.start();
+            } catch (e) {
+                stopStudentNameVoice(false);
+                setSfVoiceStatus('⚠️ تعذّر تشغيل الميكروفون.', 'is-rec', 3000);
+            }
+        }
+
         function openStudentFormModal(studentId = null) {
             if (!activeGroupId && !studentId) return;
+            stopStudentNameVoice();
+            setSfVoiceStatus('');
             if (studentId) {
                 const s = students.find(x => x.id === studentId);
                 if (!s) return;
@@ -2728,23 +2955,93 @@
             </div>`;
         }
 
+        let activeNoteRec = null;
+        let activeNoteBtn = null;
+        let noteSilenceTimer = null;
+
+        function stopNoteDictation(useGracefulStop = false) {
+            if (noteSilenceTimer) { clearTimeout(noteSilenceTimer); noteSilenceTimer = null; }
+            const rec = activeNoteRec;
+            const btn = activeNoteBtn;
+            activeNoteRec = null;
+            activeNoteBtn = null;
+            if (rec) {
+                try {
+                    if (useGracefulStop) rec.stop();
+                    else rec.abort();
+                } catch (e) {}
+            }
+            if (btn) btn.classList.remove('recording');
+        }
+
         function startDictation(studentId, btn) {
             const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SR) { alert('المتصفح لا يدعم الإملاء الصوتي.'); return; }
-            const rec = new SR(); rec.lang = 'ar-EG'; btn.classList.add('recording'); rec.start();
-            rec.onresult = ev => {
-                const txt = ev.results[0][0].transcript;
-                const s = students.find(x => x.id === studentId);
-                if (s) {
-                    const updated = s.note ? s.note + ' ' + txt : txt;
-                    updateStudentNote(studentId, updated);
-                    const inp = document.getElementById('note_' + studentId);
-                    if (inp) inp.value = updated;
-                }
-                btn.classList.remove('recording');
+
+            // لو ضغط على نفس زر المايك وهو شغال -> يفصل فوراً
+            if (activeNoteRec && activeNoteBtn === btn) {
+                stopNoteDictation(true);
+                return;
+            }
+
+            stopStudentNameVoice(false);
+            stopNoteDictation(false);
+
+            const rec = new SR();
+            activeNoteRec = rec;
+            activeNoteBtn = btn;
+            rec.lang = 'ar-EG';
+            rec.interimResults = true;
+            rec.continuous = false;
+            btn.classList.add('recording');
+
+            const s = students.find(x => x.id === studentId);
+            const baseNote = (s && s.note) ? s.note.trim() : '';
+            let lastSpoken = '';
+
+            const resetNoteTimer = (ms, hasSpoken = false) => {
+                if (noteSilenceTimer) clearTimeout(noteSilenceTimer);
+                noteSilenceTimer = setTimeout(() => {
+                    if (activeNoteRec !== rec) return;
+                    stopNoteDictation(hasSpoken);
+                }, ms);
             };
-            rec.onerror = () => btn.classList.remove('recording');
-            rec.onend = () => btn.classList.remove('recording');
+            // يفصل تلقائياً بعد 6 ثواني لو مفيش صوت
+            resetNoteTimer(6000, false);
+
+            rec.onresult = ev => {
+                let transcript = '';
+                for (let i = 0; i < ev.results.length; i++) {
+                    transcript += ev.results[i][0].transcript;
+                }
+                const txt = transcript.trim();
+                if (txt) {
+                    lastSpoken = txt;
+                    const updated = baseNote ? (baseNote + ' ' + txt) : txt;
+                    if (s) {
+                        updateStudentNote(studentId, updated);
+                        const inp = document.getElementById('note_' + studentId);
+                        if (inp) inp.value = updated;
+                    }
+                }
+                if (ev.results[ev.results.length - 1].isFinal) {
+                    playBeep();
+                    stopNoteDictation(true);
+                } else {
+                    // يفصل بعد 3 ثواني صمت بعد الكلام
+                    resetNoteTimer(3000, true);
+                }
+            };
+            rec.onerror = () => stopNoteDictation(false);
+            rec.onend = () => {
+                if (activeNoteRec === rec) stopNoteDictation(false);
+            };
+
+            try {
+                rec.start();
+            } catch (e) {
+                stopNoteDictation(false);
+            }
         }
 
         function playBeep() {
