@@ -1052,6 +1052,43 @@
             color: #93c5fd;
         }
 
+        /* ===== Session Navigator (Previous / Next) ===== */
+        .session-nav-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+            padding: 4px 8px !important;
+        }
+        .ses-nav-btn {
+            border: 0;
+            background: rgba(190, 18, 60, 0.14);
+            color: #be123c;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            font-size: 13px;
+            font-weight: 900;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            padding: 0;
+        }
+        .ses-nav-btn:hover:not(:disabled) {
+            background: #be123c;
+            color: #ffffff;
+        }
+        .ses-nav-btn:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+        body.dark-mode .ses-nav-btn {
+            background: rgba(254, 205, 211, 0.2);
+            color: #fecdd3;
+        }
+
         /* Dark Mode */
         body.dark-mode {
             --dark: #f8fafc; --text: #e2e8f0; --muted: #94a3b8;
@@ -1212,7 +1249,11 @@
                 <div class="group-heading">
                     <h2 id="currentGroupTitle"></h2>
                     <div class="stats-pills">
-                        <span id="currentSessionBadge" class="stat-pill stat-session"></span>
+                        <span class="stat-pill stat-session session-nav-pill">
+                            <button type="button" id="prevSessionBtn" class="ses-nav-btn" onclick="navigateSession(-1)" title="الحصة السابقة" aria-label="الحصة السابقة">▶</button>
+                            <span id="currentSessionBadge"></span>
+                            <button type="button" id="nextSessionBtn" class="ses-nav-btn" onclick="navigateSession(1)" title="الحصة التالية" aria-label="الحصة التالية">◀</button>
+                        </span>
                         <span id="groupScheduleBadge" class="stat-pill stat-sched" onclick="openScheduleModal(activeGroupId)" title="اضغط لتعديل ميعاد المجموعة"></span>
                         <span class="stat-pill stat-today">💵 حصيلة الحصة الحالية: <strong id="todayMoneyText">0</strong> ج</span>
                         <span class="stat-pill stat-month" onclick="openGroupFormModal(activeGroupId)" title="اضغط لتعديل بيانات المجموعة وسعر الحصة">💰 إجمالي المحصّل: <strong id="totalMoneyText">0</strong> ج ✏️</span>
@@ -2277,6 +2318,8 @@
 
             document.getElementById('currentGroupTitle').innerText = `${group.grade} - ${group.name}`;
             document.getElementById('currentSessionBadge').innerText = `الحصة رقم ${cur}`;
+            const prevBtn = document.getElementById('prevSessionBtn');
+            if (prevBtn) prevBtn.disabled = (cur <= 1);
             const day = (group.days && group.days[0]) || 'السبت';
             const tText = group.exactTime ? formatTime12(group.exactTime) : 'بدون وقت';
             const isTodayLesson = (day === getTodayArabicDayName()) || (group.date === localDateString());
@@ -2565,7 +2608,10 @@
                 const sDate = (group && group.sessionDates && group.sessionDates[i]) || '';
                 const att = Boolean(student.attendanceSessions && student.attendanceSessions[i]);
                 const paid = Boolean(student.paidSessions && student.paidSessions[i]);
-                itemsHtml += `<div class="archive-item ${!att ? 'absent' : ''}"><div><strong>الحصة ${i + 1}</strong> <span style="color:var(--muted); font-size:12px;">📅 ${sDate || '—'}</span></div><div style="display:flex; gap:6px;"><button class="btn btn-sm ${att ? 'btn-success' : 'btn-ghost'}" onclick="toggleSessionAtt('${student.id}', ${i}, ${!att}); openStudentArchiveModal('${student.id}');">${att ? '✅ حاضر' : '❌ غائب'}</button>${paid ? `<span class="pill pill-fee">💵 مدفوع</span>` : ''}</div></div>`;
+                const payBtn = isMonthly
+                    ? (paid ? `<span class="pill pill-fee">💵 مدفوع</span>` : '')
+                    : `<button class="btn btn-sm ${paid ? 'btn-primary' : (att ? 'btn-danger' : 'btn-ghost')}" onclick="toggleSessionPay('${student.id}', ${i}, ${!paid}); openStudentArchiveModal('${student.id}');">${paid ? '💵 مدفوع' : (att ? '⏳ لم يدفع' : 'دفع')}</button>`;
+                itemsHtml += `<div class="archive-item ${!att ? 'absent' : ''}"><div><strong>الحصة ${i + 1}</strong> <span style="color:var(--muted); font-size:12px;">📅 ${sDate || '—'}</span></div><div style="display:flex; gap:6px; flex-wrap:wrap;"><button class="btn btn-sm ${att ? 'btn-success' : 'btn-ghost'}" onclick="toggleSessionAtt('${student.id}', ${i}, ${!att}); openStudentArchiveModal('${student.id}');">${att ? '✅ حاضر' : '❌ غائب'}</button>${payBtn}</div></div>`;
             }
             document.getElementById('saSessionsList').innerHTML = itemsHtml || '<div style="text-align:center;color:var(--muted);">لا توجد حصص.</div>';
             openModalById('studentArchiveModal');
@@ -2859,6 +2905,19 @@
             saveStorage();
             closeModal('moveStudentsModal');
             renderStudentsTable();
+        }
+
+        function navigateSession(delta) {
+            const group = groups.find(g => g.id === activeGroupId);
+            if (!group) return;
+            const cur = group.currentSession || 1;
+            const next = Math.max(1, cur + delta);
+            if (next === cur) return;
+            group.currentSession = next;
+            ensureGroupDatesUpTo(group, next + 4);
+            group.date = group.sessionDates[next - 1] || localDateString();
+            saveStorage();
+            openGroup(activeGroupId, currentGroupViewMode, true);
         }
 
         function advanceToNextSession() {
