@@ -1337,6 +1337,7 @@
 
             <div class="face-controls-row">
                 <button type="button" class="btn btn-sm btn-ghost" onclick="startFaceRegCamera()">📷 فتح الكاميرا</button>
+                <button type="button" class="btn btn-sm btn-ghost" id="faceRegSwitchBtn" onclick="switchFaceRegCamera()">🔄 تبديل الكاميرا</button>
                 <button type="button" class="btn btn-sm btn-primary" id="faceRegCaptureBtn" onclick="captureFaceRegPhoto()" style="display:none;">📸 التقاط الآن</button>
                 <label class="btn btn-sm btn-ghost" for="faceRegFileInput" style="cursor:pointer;">📁 رفع صورة</label>
                 <input type="file" id="faceRegFileInput" accept="image/*" style="display:none;" onchange="handleFaceRegFile(event)">
@@ -2992,7 +2993,8 @@
         let faceModelsLoadingPromise = null;
         let faceAttStream = null;
         let faceAttInterval = null;
-        let faceAttFacingMode = 'user';
+        let faceAttFacingMode = 'environment';
+        let faceRegFacingMode = 'environment';
         let faceRegStream = null;
         let faceRegCapturedUrl = null;
 
@@ -3075,7 +3077,11 @@
             const img = document.getElementById('faceAttTestImg');
             img.style.display = 'none'; vid.style.display = 'block';
             try {
-                faceAttStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: faceAttFacingMode, width: { ideal: 640 }, height: { ideal: 480 } }, audio: false });
+                try {
+                    faceAttStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { exact: faceAttFacingMode }, width: { ideal: 640 }, height: { ideal: 480 } }, audio: false });
+                } catch (e1) {
+                    faceAttStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: faceAttFacingMode }, width: { ideal: 640 }, height: { ideal: 480 } }, audio: false });
+                }
                 vid.srcObject = faceAttStream;
                 await vid.play();
                 document.getElementById('faceAttPlaceholder').style.display = 'none';
@@ -3204,12 +3210,21 @@
             }
         }
 
+        function switchFaceRegCamera() {
+            faceRegFacingMode = faceRegFacingMode === 'environment' ? 'user' : 'environment';
+            if (faceRegStream) startFaceRegCamera();
+        }
+
         async function startFaceRegCamera() {
             stopFaceRegCamera();
             document.getElementById('faceRegError').style.display = 'none';
             document.getElementById('faceRegImg').style.display = 'none';
             try {
-                faceRegStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+                try {
+                    faceRegStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { exact: faceRegFacingMode } }, audio: false });
+                } catch (e1) {
+                    faceRegStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: faceRegFacingMode } }, audio: false });
+                }
                 const v = document.getElementById('faceRegVideo');
                 v.srcObject = faceRegStream; await v.play();
                 v.style.display = 'block';
