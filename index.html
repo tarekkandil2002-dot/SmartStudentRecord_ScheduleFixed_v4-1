@@ -1089,6 +1089,29 @@
             color: #fecdd3;
         }
 
+        /* ===== Face Saved Badge Next to Student Name ===== */
+        .face-saved-mark {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            background: #dcfce7;
+            color: #15803d;
+            border: 1px solid #4ade80;
+            font-size: 11px;
+            font-weight: 900;
+            padding: 1px 6px;
+            border-radius: 999px;
+            margin-right: 4px;
+            line-height: 1.3;
+            flex-shrink: 0;
+        }
+        body.dark-mode .face-saved-mark {
+            background: rgba(22, 163, 74, 0.28);
+            color: #86efac;
+            border-color: #22c55e;
+        }
+
         /* Dark Mode */
         body.dark-mode {
             --dark: #f8fafc; --text: #e2e8f0; --muted: #94a3b8;
@@ -2447,7 +2470,7 @@
                     <tr class="${due ? 'row-warning' : ''}">
                         <td><input type="checkbox" class="row-select-chk" data-sid="${student.id}" ${selectedStudentIds.has(String(student.id)) ? 'checked' : ''} onchange="toggleRowSelect('${student.id}', this.checked)"></td>
                         <td style="text-align:right;">
-                            <button type="button" class="student-name-btn" onclick="openStudentArchiveModal('${student.id}')">${escHtml(student.name)} ${due ? '⚠️' : ''}</button>
+                            <button type="button" class="student-name-btn" onclick="openStudentArchiveModal('${student.id}')">${escHtml(student.name)} ${renderFaceSavedMark(student)} ${due ? '⚠️' : ''}</button>
                             ${renderStudentMiniIcons(student.id)}
                         </td>
                         <td><button type="button" class="pay-mode-pill ${isMonthly ? 'mode-monthly' : 'mode-session'}" onclick="toggleStudentPayMode('${student.id}')">${isMonthly ? '💳 بالشهر' : '💵 بالحصة'}</button></td>
@@ -2999,6 +3022,11 @@
             openModalById('leaderboardModal');
         }
 
+        function renderFaceSavedMark(student) {
+            const hasFace = Boolean(student && ((Array.isArray(student.faceDescriptor) && student.faceDescriptor.length > 0) || student.faceAvatar));
+            return hasFace ? '<span class="face-saved-mark" title="صورة وبصمة الوجه محفوظة">📸✓</span>' : '';
+        }
+
         function renderStudentMiniIcons(studentId) {
             const stu = students.find(s => s.id === studentId);
             const hasFace = Boolean(stu && Array.isArray(stu.faceDescriptor) && stu.faceDescriptor.length > 0);
@@ -3234,7 +3262,7 @@
             document.getElementById('masterSummaryStrip').innerHTML = `<div class="kpi-card blue"><span class="kpi-label">الطلاب</span><span class="kpi-value">${rows.length}</span></div><div class="kpi-card green"><span class="kpi-label">المدفوعات</span><span class="kpi-value">${sumPaid} ج</span></div><div class="kpi-card red"><span class="kpi-label">مستحق دفع</span><span class="kpi-value" style="color:var(--danger);">${sumDue}</span></div><div class="kpi-card amber"><span class="kpi-label">الحضور</span><span class="kpi-value">${avgPerc}%</span></div>`;
             const tbody = document.getElementById('masterSheetBody');
             if (!rows.length) { tbody.innerHTML = `<tr><td colspan="10" style="padding:26px; color:var(--muted);">لا توجد بيانات.</td></tr>`; return; }
-            tbody.innerHTML = rows.map((r, idx) => `<tr><td>${idx + 1}</td><td style="text-align:right;"><button type="button" class="student-name-btn" onclick="openStudentArchiveModal('${r.student.id}')">👤 ${escHtml(r.student.name)}</button></td><td>${r.group ? escHtml(r.group.grade + ' - ' + r.group.name) : '—'}</td><td>${r.group && r.group.days ? escHtml(r.group.days[0]) : '—'}</td><td>${r.student.paymentMode === 'monthly' ? '💳 بالشهر' : '💵 بالحصة'}</td><td>${r.perc}%</td><td>${r.isDue ? '⚠️ مستحق' : '✅ مسدد'}</td><td>${r.paidTotal} ج</td><td>${r.student.points || 0} ⭐</td><td class="no-print"><button type="button" class="btn btn-sm btn-purple" onclick="openStudentArchiveModal('${r.student.id}')">📂</button></td></tr>`).join('');
+            tbody.innerHTML = rows.map((r, idx) => `<tr><td>${idx + 1}</td><td style="text-align:right;"><button type="button" class="student-name-btn" onclick="openStudentArchiveModal('${r.student.id}')">👤 ${escHtml(r.student.name)} ${renderFaceSavedMark(r.student)}</button></td><td>${r.group ? escHtml(r.group.grade + ' - ' + r.group.name) : '—'}</td><td>${r.group && r.group.days ? escHtml(r.group.days[0]) : '—'}</td><td>${r.student.paymentMode === 'monthly' ? '💳 بالشهر' : '💵 بالحصة'}</td><td>${r.perc}%</td><td>${r.isDue ? '⚠️ مستحق' : '✅ مسدد'}</td><td>${r.paidTotal} ج</td><td>${r.student.points || 0} ⭐</td><td class="no-print"><button type="button" class="btn btn-sm btn-purple" onclick="openStudentArchiveModal('${r.student.id}')">📂</button></td></tr>`).join('');
         }
         function exportMasterSheetCSV() {
             const rows = getFilteredMasterRows();
@@ -3304,7 +3332,7 @@
                     else if (isAtt) { rowUnpaid = true; payBtnHtml = `<button type="button" class="daily-toggle-btn pay-no" onclick="toggleSessionPay('${student.id}', ${curIdx}, true)">⏳ لم يدفع</button>`; }
                     else payBtnHtml = `<button type="button" class="daily-toggle-btn pay-muted" onclick="toggleSessionPay('${student.id}', ${curIdx}, true)">غائب —</button>`;
                 }
-                return `<div class="daily-row ${rowUnpaid ? 'is-unpaid' : (isAtt ? 'is-present' : '')}"><div class="daily-student-info"><div style="width:100%;"><div class="daily-name-line"><input type="checkbox" class="daily-chk" ${selectedStudentIds.has(String(student.id)) ? 'checked' : ''} onchange="toggleRowSelect('${student.id}', this.checked)"><button type="button" class="student-name-btn" onclick="openStudentArchiveModal('${student.id}')">${escHtml(student.name)}</button></div>${renderStudentMiniIcons(student.id)}</div></div><div class="daily-controls"><button type="button" class="daily-toggle-btn ${isAtt ? 'att-yes' : 'att-no'}" onclick="toggleSessionAtt('${student.id}', ${curIdx}, ${!isAtt})">${isAtt ? '✅ حاضر' : '❌ غائب'}</button>${payBtnHtml}</div></div>`;
+                return `<div class="daily-row ${rowUnpaid ? 'is-unpaid' : (isAtt ? 'is-present' : '')}"><div class="daily-student-info"><div style="width:100%;"><div class="daily-name-line"><input type="checkbox" class="daily-chk" ${selectedStudentIds.has(String(student.id)) ? 'checked' : ''} onchange="toggleRowSelect('${student.id}', this.checked)"><button type="button" class="student-name-btn" onclick="openStudentArchiveModal('${student.id}')">${escHtml(student.name)} ${renderFaceSavedMark(student)}</button></div>${renderStudentMiniIcons(student.id)}</div></div><div class="daily-controls"><button type="button" class="daily-toggle-btn ${isAtt ? 'att-yes' : 'att-no'}" onclick="toggleSessionAtt('${student.id}', ${curIdx}, ${!isAtt})">${isAtt ? '✅ حاضر' : '❌ غائب'}</button>${payBtnHtml}</div></div>`;
             }).join('');
         }
 
