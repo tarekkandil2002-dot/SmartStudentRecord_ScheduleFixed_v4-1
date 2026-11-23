@@ -1596,7 +1596,11 @@
                 </div>
                 <div class="form-group">
                     <label>رقم واتساب ولي الأمر (اختياري)</label>
-                    <input type="tel" id="sfPhone" class="form-control" placeholder="01012345678">
+                    <div class="voice-input-row">
+                        <input type="tel" id="sfPhone" class="form-control" placeholder="01012345678">
+                        <button type="button" id="sfContactBtn" class="voice-mic-btn" onclick="pickContactForStudent()" title="اختيار من جهات الاتصال في الهاتف" aria-label="اختيار من جهات الاتصال">📇</button>
+                    </div>
+                    <div id="sfContactStatus" class="voice-status-hint" style="display:none;"></div>
                 </div>
                 <div class="form-group">
                     <label>نظام الدفع</label>
@@ -2805,10 +2809,75 @@
             }
         }
 
+        let sfContactStatusTimer = null;
+
+        function setSfContactStatus(msg, type = '', autoHideMs = 0) {
+            const el = document.getElementById('sfContactStatus');
+            if (!el) return;
+            clearTimeout(sfContactStatusTimer);
+            if (!msg) {
+                el.style.display = 'none';
+                el.textContent = '';
+                el.className = 'voice-status-hint';
+                return;
+            }
+            el.textContent = msg;
+            el.className = 'voice-status-hint' + (type ? ' ' + type : '');
+            el.style.display = 'block';
+            if (autoHideMs > 0) {
+                sfContactStatusTimer = setTimeout(() => setSfContactStatus(''), autoHideMs);
+            }
+        }
+
+        function cleanPickedPhone(raw) {
+            let digits = String(raw || '').replace(/[^0-9+]/g, '');
+            if (digits.startsWith('+20')) digits = '0' + digits.slice(3);
+            else if (digits.startsWith('0020')) digits = '0' + digits.slice(4);
+            else if (digits.startsWith('20') && digits.length === 12) digits = '0' + digits.slice(2);
+            return digits.replace(/[^0-9]/g, '');
+        }
+
+        async function pickContactForStudent() {
+            if (!('contacts' in navigator) || typeof navigator.contacts.select !== 'function') {
+                setSfContactStatus('⚠️ ميزة جهات الاتصال تعمل على متصفح Chrome في هواتف أندرويد عبر رابط HTTPS.', 'is-rec', 4500);
+                return;
+            }
+            try {
+                const picked = await navigator.contacts.select(['name', 'tel'], { multiple: false });
+                if (!picked || !picked.length) return;
+                const contact = picked[0];
+                const rawTel = Array.isArray(contact.tel) && contact.tel.length ? contact.tel[0] : '';
+                const rawName = Array.isArray(contact.name) && contact.name.length ? String(contact.name[0]).trim() : '';
+
+                const phoneInput = document.getElementById('sfPhone');
+                const nameInput = document.getElementById('sfName');
+
+                const cleanedPhone = cleanPickedPhone(rawTel);
+                if (phoneInput && cleanedPhone) {
+                    phoneInput.value = cleanedPhone;
+                }
+                if (nameInput && !nameInput.value.trim() && rawName) {
+                    nameInput.value = rawName;
+                }
+
+                if (cleanedPhone) {
+                    playBeep();
+                    setSfContactStatus('✅ تم إضافة الرقم من جهات الاتصال' + (rawName ? ` (${rawName})` : ''), 'is-ok', 3500);
+                } else {
+                    setSfContactStatus('⚠️ جهة الاتصال المختارة لا تحتوي على رقم هاتف.', 'is-rec', 3500);
+                }
+            } catch (e) {
+                if (e && e.name !== 'AbortError') {
+                    setSfContactStatus('⚠️ تعذّر فتح جهات الاتصال، تأكد من السماح بالصلاحية.', 'is-rec', 3500);
+                }
+            }
+        }
+
         function openStudentFormModal(studentId = null) {
             if (!activeGroupId && !studentId) return;
             stopStudentNameVoice();
             setSfVoiceStatus('');
+            setSfContactStatus('');
             if (studentId) {
                 const s = students.find(x => x.id === studentId);
                 if (!s) return;
