@@ -1112,6 +1112,129 @@
             border-color: #22c55e;
         }
 
+        /* ===== Vacation Mode Styles ===== */
+        .side-item.item-amber { border-right: 5px solid #d97706; }
+        .side-item.item-amber .side-ico { background: #fef3c7; }
+
+        .vacation-banner {
+            display: none;
+            background: linear-gradient(135deg, rgba(254, 243, 199, 0.92) 0%, rgba(255, 251, 235, 0.95) 55%, rgba(254, 215, 170, 0.88) 100%);
+            border: 2px solid #f59e0b;
+            border-right: 7px solid #d97706;
+            border-radius: 20px;
+            padding: 16px 18px;
+            margin-bottom: 18px;
+            box-shadow: 0 10px 24px rgba(217, 119, 6, 0.16);
+        }
+        .vacation-banner.is-scheduled {
+            background: linear-gradient(135deg, rgba(239, 246, 255, 0.92), rgba(245, 243, 255, 0.92));
+            border-color: #818cf8;
+            border-right-color: #4f46e5;
+            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.12);
+        }
+        .vacation-banner-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .vacation-banner-title {
+            font-size: 17px;
+            font-weight: 900;
+            color: #92400e;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .vacation-banner.is-scheduled .vacation-banner-title {
+            color: #3730a3;
+        }
+        .vacation-banner-meta {
+            font-size: 13px;
+            font-weight: 700;
+            color: #78350f;
+            line-height: 1.7;
+            margin-bottom: 10px;
+        }
+        .vacation-banner.is-scheduled .vacation-banner-meta {
+            color: #4338ca;
+        }
+        .vacation-presets {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+        .vac-preset-chip {
+            border: 1px solid #fcd34d;
+            background: #fffbeb;
+            color: #92400e;
+            border-radius: 999px;
+            padding: 4px 11px;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .vac-preset-chip:hover {
+            background: #f59e0b;
+            color: #fff;
+        }
+        .vac-preview-box {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-radius: 12px;
+            padding: 10px 12px;
+            font-size: 13px;
+            font-weight: 800;
+            color: #92400e;
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+        .vac-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-right: 5px solid #f59e0b;
+            border-radius: 12px;
+            padding: 10px 12px;
+            margin-bottom: 8px;
+        }
+        .vac-list-item.is-active-now {
+            background: #fffbeb;
+            border-color: #fcd34d;
+            border-right-color: #d97706;
+        }
+        body.dark-mode .vacation-banner {
+            background: linear-gradient(135deg, rgba(120, 53, 15, 0.55), rgba(30, 41, 59, 0.85)) !important;
+            border-color: #f59e0b !important;
+        }
+        body.dark-mode .vacation-banner.is-scheduled {
+            background: linear-gradient(135deg, rgba(49, 46, 129, 0.55), rgba(30, 41, 59, 0.85)) !important;
+            border-color: #818cf8 !important;
+        }
+        body.dark-mode .vacation-banner-title { color: #fde68a !important; }
+        body.dark-mode .vacation-banner-meta { color: #fef3c7 !important; }
+        body.dark-mode .vacation-banner.is-scheduled .vacation-banner-title,
+        body.dark-mode .vacation-banner.is-scheduled .vacation-banner-meta { color: #c7d2fe !important; }
+        body.dark-mode .vac-preview-box,
+        body.dark-mode .vac-list-item {
+            background: rgba(30, 41, 59, 0.85) !important;
+            border-color: rgba(148, 163, 184, 0.28) !important;
+            color: #fde68a !important;
+        }
+        body.dark-mode .vac-preset-chip {
+            background: rgba(120, 53, 15, 0.45);
+            border-color: rgba(251, 191, 36, 0.45);
+            color: #fde68a;
+        }
+
         /* Dark Mode */
         body.dark-mode {
             --dark: #f8fafc; --text: #e2e8f0; --muted: #94a3b8;
@@ -1208,6 +1331,10 @@
                 <span class="side-ico">💰</span>
                 <span class="side-txt">الإجمالي العام</span>
             </button>
+            <button type="button" class="side-item item-amber" onclick="selectSideMenuItem(() => openVacationModal())">
+                <span class="side-ico">🏖️</span>
+                <span class="side-txt">وضع الإجازة (إيقاف مؤقت)</span>
+            </button>
             <hr class="side-divider">
             <button type="button" class="side-item item-slate" onclick="selectSideMenuItem(() => exportData())">
                 <span class="side-ico">💾</span>
@@ -1227,6 +1354,7 @@
     <main class="container">
         <!-- ===== Dashboard View ===== -->
         <section id="dashboardView">
+            <div id="vacationDashboardBanner" class="vacation-banner"></div>
             <div class="today-panel">
                 <div class="today-panel-head">
                     <h3>📌 لوحة حصص اليوم — اضغط على المجموعة لتسجيل الحضور والدفع</h3>
@@ -1239,6 +1367,7 @@
                 <div class="auto-dash-head">
                     <h3>📈 اللوحة المختصرة التلقائية (تتحدث لحظياً)</h3>
                     <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                        <button type="button" class="btn btn-sm btn-warning" onclick="openVacationModal()" title="إيقاف البرنامج وتجميد عداد الشهر خلال فترة الإجازة">🏖️ وضع الإجازة</button>
                         <button type="button" class="btn btn-sm btn-purple" onclick="changeGlobalMonthlyCutoff()" title="تحديد تاريخ فصل القديم عن الجديد لطلاب الشهر">🗓️ بداية الشهر الجديد: <span id="globalCutoffBadge"></span> ✏️</button>
                         <button type="button" class="btn btn-sm btn-primary" onclick="openMasterSheet()">📊 فتح الشيت الأساسي الكبير</button>
                     </div>
@@ -1741,6 +1870,54 @@
         </div>
     </div>
 
+    <!-- ===== Modal: Vacation Mode (وضع الإجازة) ===== -->
+    <div id="vacationModal" class="modal">
+        <div class="modal-card narrow">
+            <button class="modal-close" onclick="closeModal('vacationModal')">&times;</button>
+            <h3 class="modal-title" style="color:#b45309;">🏖️ وضع الإجازة (إيقاف مؤقت)</h3>
+            <p class="modal-sub">حدد تاريخ بداية ونهاية الإجازة؛ سيتم إيقاف حصص اليوم وتجميد عداد الدفع الشهري تلقائياً طوال الفترة.</p>
+
+            <div class="vacation-presets">
+                <button type="button" class="vac-preset-chip" onclick="setVacNamePreset('إجازة نصف العام')">❄️ إجازة نصف العام</button>
+                <button type="button" class="vac-preset-chip" onclick="setVacNamePreset('إجازة عيد الفطر')">🌙 إجازة عيد الفطر</button>
+                <button type="button" class="vac-preset-chip" onclick="setVacNamePreset('إجازة عيد الأضحى')">🐑 إجازة عيد الأضحى</button>
+                <button type="button" class="vac-preset-chip" onclick="setVacNamePreset('إجازة الصيف')">☀️ إجازة الصيف</button>
+            </div>
+
+            <input type="hidden" id="vacEditId">
+            <div class="form-grid">
+                <div class="form-group full">
+                    <label>اسم الإجازة</label>
+                    <input type="text" id="vacNameInput" class="form-control" placeholder="مثال: إجازة نصف العام" value="إجازة نصف العام">
+                </div>
+                <div class="form-group">
+                    <label>📅 تاريخ البداية</label>
+                    <input type="date" id="vacStartInput" class="form-control" oninput="updateVacationPreview()" onchange="updateVacationPreview()">
+                </div>
+                <div class="form-group">
+                    <label>📅 تاريخ النهاية</label>
+                    <input type="date" id="vacEndInput" class="form-control" oninput="updateVacationPreview()" onchange="updateVacationPreview()">
+                </div>
+            </div>
+
+            <div id="vacPreviewBox" class="vac-preview-box" style="margin-top:12px;"></div>
+
+            <div style="display:flex; gap:8px; margin-bottom:14px;">
+                <button type="button" class="btn btn-warning" style="flex:1;" onclick="saveVacationPeriod()">💾 حفظ الإجازة</button>
+                <button type="button" class="btn btn-ghost" onclick="resetVacationForm()">جديد</button>
+            </div>
+
+            <div id="vacActiveResumeWrap" style="display:none; margin-bottom:14px;">
+                <button type="button" class="btn btn-success" style="width:100%;" onclick="endActiveVacationNow()">▶️ إنهاء الإجازة الآن واستئناف الدروس</button>
+            </div>
+
+            <div>
+                <h4 style="margin:0 0 8px; font-size:14px; font-weight:900; color:var(--dark);">📋 الإجازات المسجلة (تُخصم تلقائياً من عداد الشهر):</h4>
+                <div id="vacationsListBox" style="max-height:210px; overflow-y:auto;"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- ===== Modal: Safe Exit ===== -->
     <div id="safeExitModal" class="modal">
         <div class="modal-card narrow" style="text-align:center;">
@@ -1974,18 +2151,301 @@
             else renderDashboard();
         }
 
+        /* ===== Vacation Mode Engine (وضع الإجازة) ===== */
+        const VACATIONS_STORAGE_KEY = 'smart_student_vacations_v1';
+        let vacations = readStoredJSON(localStorage, VACATIONS_STORAGE_KEY, []);
+        if (!Array.isArray(vacations)) vacations = [];
+
+        function saveVacations() {
+            try { localStorage.setItem(VACATIONS_STORAGE_KEY, JSON.stringify(vacations)); } catch (e) {}
+            markBackupPending();
+        }
+
+        function getValidVacations() {
+            return (Array.isArray(vacations) ? vacations : []).filter(v =>
+                v && parseLocalDate(v.startDate) && parseLocalDate(v.endDate) && v.endDate >= v.startDate
+            );
+        }
+
+        function getActiveVacation(dateStr = localDateString()) {
+            return getValidVacations().find(v => dateStr >= v.startDate && dateStr <= v.endDate) || null;
+        }
+
+        function getUpcomingVacation(dateStr = localDateString()) {
+            const upcoming = getValidVacations()
+                .filter(v => v.startDate > dateStr)
+                .sort((a, b) => a.startDate.localeCompare(b.startDate));
+            return upcoming.length ? upcoming[0] : null;
+        }
+
+        function countVacationOverlapDays(rangeStartStr, rangeEndStr) {
+            const rStart = parseLocalDate(rangeStartStr);
+            const rEnd = parseLocalDate(rangeEndStr);
+            if (!rStart || !rEnd || rEnd < rStart) return 0;
+
+            const intervals = [];
+            getValidVacations().forEach(v => {
+                const vStart = parseLocalDate(v.startDate);
+                const vEnd = parseLocalDate(v.endDate);
+                if (!vStart || !vEnd) return;
+                const s = vStart > rStart ? vStart.getTime() : rStart.getTime();
+                const e = vEnd < rEnd ? vEnd.getTime() : rEnd.getTime();
+                if (e >= s) intervals.push([s, e]);
+            });
+
+            if (!intervals.length) return 0;
+            intervals.sort((a, b) => a[0] - b[0]);
+
+            const merged = [intervals[0]];
+            for (let i = 1; i < intervals.length; i++) {
+                const prev = merged[merged.length - 1];
+                const cur = intervals[i];
+                if (cur[0] <= prev[1] + 86400000) {
+                    prev[1] = Math.max(prev[1], cur[1]);
+                } else {
+                    merged.push(cur);
+                }
+            }
+
+            let totalDays = 0;
+            merged.forEach(([s, e]) => {
+                totalDays += Math.floor((e - s) / 86400000) + 1;
+            });
+            return totalDays;
+        }
+
+        function setVacNamePreset(name) {
+            const inp = document.getElementById('vacNameInput');
+            if (inp) inp.value = name;
+        }
+
+        function resetVacationForm() {
+            const today = localDateString();
+            const twoWeeksLater = new Date();
+            twoWeeksLater.setDate(twoWeeksLater.getDate() + 14);
+            document.getElementById('vacEditId').value = '';
+            document.getElementById('vacNameInput').value = 'إجازة نصف العام';
+            document.getElementById('vacStartInput').value = today;
+            document.getElementById('vacEndInput').value = localDateString(twoWeeksLater);
+            updateVacationPreview();
+        }
+
+        function updateVacationPreview() {
+            const box = document.getElementById('vacPreviewBox');
+            if (!box) return;
+            const sVal = document.getElementById('vacStartInput').value;
+            const eVal = document.getElementById('vacEndInput').value;
+            const sDt = parseLocalDate(sVal);
+            const eDt = parseLocalDate(eVal);
+            if (!sDt || !eDt) {
+                box.innerHTML = '📅 اختر تاريخ بداية ونهاية الإجازة.';
+                return;
+            }
+            if (eDt < sDt) {
+                box.innerHTML = '⚠️ تاريخ النهاية يجب أن يكون بعد أو يساوي تاريخ البداية.';
+                return;
+            }
+            const days = Math.floor((eDt.getTime() - sDt.getTime()) / 86400000) + 1;
+            const today = localDateString();
+            let statusTxt = '';
+            if (today >= sVal && today <= eVal) statusTxt = '🟢 ستتفعّل الإجازة فوراً (اليوم داخل الفترة)';
+            else if (sVal > today) statusTxt = '⏳ إجازة مجدولة (ستتفعّل تلقائياً في موعدها)';
+            else statusTxt = '📁 إجازة سابقة (ستُخصم أيامها تلقائياً من حساب الشهر)';
+
+            box.innerHTML = `⏱️ <strong>المدة:</strong> ${days} ${days === 1 ? 'يوم' : 'أيام'} (من ${formatShortDate(sVal)} إلى ${formatShortDate(eVal)})<br>${statusTxt}`;
+        }
+
+        function openVacationModal() {
+            const active = getActiveVacation();
+            if (active) {
+                document.getElementById('vacEditId').value = active.id;
+                document.getElementById('vacNameInput').value = active.name || 'إجازة نصف العام';
+                document.getElementById('vacStartInput').value = active.startDate;
+                document.getElementById('vacEndInput').value = active.endDate;
+                updateVacationPreview();
+            } else {
+                resetVacationForm();
+            }
+            renderVacationsList();
+            openModalById('vacationModal');
+        }
+
+        function editVacationPeriod(id) {
+            const v = vacations.find(x => x.id === id);
+            if (!v) return;
+            document.getElementById('vacEditId').value = v.id;
+            document.getElementById('vacNameInput').value = v.name || 'إجازة';
+            document.getElementById('vacStartInput').value = v.startDate;
+            document.getElementById('vacEndInput').value = v.endDate;
+            updateVacationPreview();
+        }
+
+        function saveVacationPeriod() {
+            const editId = document.getElementById('vacEditId').value;
+            const name = (document.getElementById('vacNameInput').value || '').trim() || 'إجازة';
+            const startDate = document.getElementById('vacStartInput').value;
+            const endDate = document.getElementById('vacEndInput').value;
+
+            if (!parseLocalDate(startDate) || !parseLocalDate(endDate)) {
+                alert('برجاء اختيار تاريخ بداية ونهاية صحيحين.');
+                return;
+            }
+            if (endDate < startDate) {
+                alert('تاريخ نهاية الإجازة لا يمكن أن يكون قبل تاريخ البداية.');
+                return;
+            }
+
+            if (editId) {
+                const existing = vacations.find(x => x.id === editId);
+                if (existing) {
+                    existing.name = name;
+                    existing.startDate = startDate;
+                    existing.endDate = endDate;
+                }
+            } else {
+                vacations.unshift({
+                    id: 'vac_' + Date.now(),
+                    name,
+                    startDate,
+                    endDate
+                });
+            }
+
+            saveVacations();
+            resetVacationForm();
+            renderVacationsList();
+            if (activeGroupId) renderStudentsTable();
+            else renderDashboard();
+            playBeep();
+        }
+
+        function deleteVacationPeriod(id) {
+            if (!confirm('هل تريد حذف هذه الإجازة؟')) return;
+            vacations = vacations.filter(x => x.id !== id);
+            saveVacations();
+            renderVacationsList();
+            if (activeGroupId) renderStudentsTable();
+            else renderDashboard();
+        }
+
+        function endActiveVacationNow() {
+            const today = localDateString();
+            const active = getActiveVacation(today);
+            if (!active) return;
+            if (!confirm(`إنهاء «${active.name}» الآن واستئناف الدروس من اليوم؟`)) return;
+
+            if (active.startDate === today) {
+                // بدأت اليوم فقط -> نحذفها
+                vacations = vacations.filter(x => x.id !== active.id);
+            } else {
+                // كانت شغالة من قبل -> نجعل نهايتها أمس لحفظ الأيام السابقة في الخصم
+                const yest = new Date();
+                yest.setDate(yest.getDate() - 1);
+                active.endDate = localDateString(yest);
+            }
+            saveVacations();
+            closeModal('vacationModal');
+            if (activeGroupId) renderStudentsTable();
+            else renderDashboard();
+            playBeep();
+        }
+
+        function renderVacationsList() {
+            const box = document.getElementById('vacationsListBox');
+            const resumeWrap = document.getElementById('vacActiveResumeWrap');
+            const today = localDateString();
+            const active = getActiveVacation(today);
+            if (resumeWrap) resumeWrap.style.display = active ? 'block' : 'none';
+            if (!box) return;
+
+            const list = getValidVacations().sort((a, b) => b.startDate.localeCompare(a.startDate));
+            if (!list.length) {
+                box.innerHTML = '<div style="text-align:center;color:var(--muted);font-size:13px;padding:12px;">لا توجد إجازات مسجلة بعد.</div>';
+                return;
+            }
+            box.innerHTML = list.map(v => {
+                const isNow = today >= v.startDate && today <= v.endDate;
+                const sDt = parseLocalDate(v.startDate);
+                const eDt = parseLocalDate(v.endDate);
+                const days = Math.floor((eDt.getTime() - sDt.getTime()) / 86400000) + 1;
+                return `
+                    <div class="vac-list-item ${isNow ? 'is-active-now' : ''}">
+                        <div>
+                            <div style="font-weight:900;font-size:13.5px;">${isNow ? '🟢 ' : '🏖️ '}${escHtml(v.name)} <small style="color:var(--muted);">(${days} يوم)</small></div>
+                            <div style="font-size:12px;color:var(--muted);font-weight:700;">من ${v.startDate} إلى ${v.endDate}</div>
+                        </div>
+                        <div style="display:flex;gap:5px;">
+                            <button type="button" class="btn btn-sm btn-ghost" onclick="editVacationPeriod('${v.id}')" title="تعديل">✏️</button>
+                            <button type="button" class="btn btn-sm btn-danger" onclick="deleteVacationPeriod('${v.id}')" title="حذف">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderVacationBanner() {
+            const banner = document.getElementById('vacationDashboardBanner');
+            if (!banner) return;
+            const today = localDateString();
+            const active = getActiveVacation(today);
+            if (active) {
+                const eDt = parseLocalDate(active.endDate);
+                const tDt = parseLocalDate(today);
+                const leftDays = Math.floor((eDt.getTime() - tDt.getTime()) / 86400000) + 1;
+                banner.className = 'vacation-banner';
+                banner.style.display = 'block';
+                banner.innerHTML = `
+                    <div class="vacation-banner-top">
+                        <div class="vacation-banner-title">🏖️ البرنامج في وضع الإجازة — ${escHtml(active.name)}</div>
+                        <span class="pill pill-warn">متبقي ${leftDays} ${leftDays === 1 ? 'يوم' : 'أيام'}</span>
+                    </div>
+                    <div class="vacation-banner-meta">
+                        📅 من <strong>${formatArabicDate(active.startDate)}</strong> إلى <strong>${formatArabicDate(active.endDate)}</strong><br>
+                        ❄️ عداد الدفع الشهري متجمد تلقائياً ولن تُحسب أيام الإجازة على أي طالب.
+                    </div>
+                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                        <button type="button" class="btn btn-sm btn-success" onclick="endActiveVacationNow()">▶️ استئناف الدروس الآن</button>
+                        <button type="button" class="btn btn-sm btn-ghost" onclick="openVacationModal()">✏️ تعديل التواريخ</button>
+                    </div>
+                `;
+                return;
+            }
+
+            const upcoming = getUpcomingVacation(today);
+            if (upcoming) {
+                banner.className = 'vacation-banner is-scheduled';
+                banner.style.display = 'block';
+                banner.innerHTML = `
+                    <div class="vacation-banner-top">
+                        <div class="vacation-banner-title">📅 إجازة مجدولة: ${escHtml(upcoming.name)}</div>
+                        <button type="button" class="btn btn-sm btn-ghost" onclick="openVacationModal()">✏️ تعديل</button>
+                    </div>
+                    <div class="vacation-banner-meta" style="margin-bottom:0;">
+                        تبدأ من <strong>${upcoming.startDate}</strong> وحتى <strong>${upcoming.endDate}</strong> — سيتوقف البرنامج تلقائياً في موعدها.
+                    </div>
+                `;
+                return;
+            }
+
+            banner.style.display = 'none';
+            banner.innerHTML = '';
+        }
+
         function computeMonthlyWeeksFromDate(cycleStartDate, hasPaidCycle) {
             const startDt = parseLocalDate(cycleStartDate);
-            const todayDt = parseLocalDate(localDateString());
+            const todayStr = localDateString();
+            const todayDt = parseLocalDate(todayStr);
             if (!startDt || !todayDt) return { totalWeeks: 0, weekInMonth: 0, oldUnpaidMonths: 0, isPaid: false, isDue: false };
-            const diffDays = Math.floor((todayDt.getTime() - startDt.getTime()) / 86400000);
-            if (diffDays < 0) return { totalWeeks: 0, weekInMonth: 0, oldUnpaidMonths: 0, isPaid: Boolean(hasPaidCycle), isDue: false };
+            const rawDiffDays = Math.floor((todayDt.getTime() - startDt.getTime()) / 86400000);
+            if (rawDiffDays < 0) return { totalWeeks: 0, weekInMonth: 0, oldUnpaidMonths: 0, isPaid: Boolean(hasPaidCycle), isDue: false };
+            const vacDays = countVacationOverlapDays(cycleStartDate, todayStr);
+            const diffDays = Math.max(0, rawDiffDays - vacDays);
             const totalWeeks = Math.floor(diffDays / 7) + 1;
             const completedMonths = Math.floor((totalWeeks - 1) / MONTHLY_LIMIT);
             const weekInMonth = ((totalWeeks - 1) % MONTHLY_LIMIT) + 1;
             const oldUnpaidMonths = hasPaidCycle ? Math.max(0, completedMonths - 1) : completedMonths;
             const isPaid = Boolean(hasPaidCycle) && (totalWeeks <= MONTHLY_LIMIT);
-            return { totalWeeks, weekInMonth, oldUnpaidMonths, isPaid, isDue: !isPaid };
+            return { totalWeeks, weekInMonth, oldUnpaidMonths, isPaid, isDue: !isPaid, vacDays };
         }
 
         function getStudentMonthlyState(student) {
@@ -2069,6 +2529,7 @@
             const msView = document.getElementById('masterSheetView');
             if (msView) msView.style.display = 'none';
             renderTeacherName();
+            renderVacationBanner();
             renderTodayPanel();
             renderAutoDashboard();
             document.getElementById('globalSearch').value = '';
@@ -3074,9 +3535,16 @@
 
         function openTodayModal() {
             const todayName = getTodayArabicDayName();
-            document.getElementById('todayModalSub').innerText = `اليوم: ${todayName}`;
-            const list = groups.filter(g => g.days && g.days[0] === todayName).sort((a, b) => (a.exactTime || '99:99').localeCompare(b.exactTime || '99:99'));
+            const todayStr = localDateString();
+            document.getElementById('todayModalSub').innerText = `اليوم: ${todayName} (${todayStr})`;
             const container = document.getElementById('todayList');
+            const activeVac = getActiveVacation(todayStr);
+            if (activeVac) {
+                container.innerHTML = `<div style="text-align:center; padding:26px; color:#92400e; font-weight:800;">🏖️ أنت حالياً في <strong>${escHtml(activeVac.name)}</strong><br><small style="color:var(--muted);">من ${activeVac.startDate} إلى ${activeVac.endDate}</small><div style="margin-top:12px;"><button class="btn btn-sm btn-warning" onclick="closeModal('todayModal'); openVacationModal();">⚙️ تعديل أو إنهاء الإجازة</button></div></div>`;
+                openModalById('todayModal');
+                return;
+            }
+            const list = groups.filter(g => g.days && g.days[0] === todayName).sort((a, b) => (a.exactTime || '99:99').localeCompare(b.exactTime || '99:99'));
             container.innerHTML = !list.length
                 ? `<div style="text-align:center; padding:26px; color:var(--muted);">لا توجد حصص ليوم ${todayName} 🏖️</div>`
                 : list.map(g => `<div class="archive-item today-list-item-glow" style="cursor:pointer; margin-bottom:10px;" onclick="closeModal('todayModal'); openGroup('${g.id}', 'daily');"><div><strong>🟢 ${escHtml(g.grade)} - ${escHtml(g.name)}</strong></div><span class="btn btn-sm btn-success">🚀 فتح</span></div>`).join('');
@@ -3212,7 +3680,7 @@
         }
 
         function makeBackupObject() {
-            return { format: BACKUP_FORMAT, backupVersion: 3, appVersion: '11.9', createdAt: new Date().toISOString(), teacherName: getTeacherName(), monthlyCutoffDate: getMonthlyCutoffDate(), groups, students };
+            return { format: BACKUP_FORMAT, backupVersion: 3, appVersion: '11.9', createdAt: new Date().toISOString(), teacherName: getTeacherName(), monthlyCutoffDate: getMonthlyCutoffDate(), vacations, groups, students };
         }
         function downloadJSON(obj, prefix) {
             const blob = new Blob([JSON.stringify(obj, null, 2)], { type: 'application/json;charset=utf-8' });
@@ -3241,6 +3709,7 @@
                     groups = data.groups; students = data.students;
                     if (typeof data.teacherName === 'string' && data.teacherName.trim()) localStorage.setItem('teacher_name_v1', data.teacherName.trim());
                     if (typeof data.monthlyCutoffDate === 'string' && parseLocalDate(data.monthlyCutoffDate)) setMonthlyCutoffDate(data.monthlyCutoffDate);
+                    if (Array.isArray(data.vacations)) { vacations = data.vacations; saveVacations(); }
                     migrateAndNormalizeData(); saveStorage(); renderDashboard();
                     alert('✅ تم استرجاع البيانات بنجاح.');
                 } catch (err) { alert('تعذّر استرجاع الملف: ' + err.message); }
@@ -3352,8 +3821,17 @@
             const todayName = getTodayArabicDayName();
             const todayStr = localDateString(now);
             if (pill) pill.innerText = `📅 ${todayName} — ${formatShortDate(todayStr)} (${todayStr})`;
-            const todaysGroups = groups.filter(g => g.days && g.days[0] === todayName).sort((a, b) => (a.exactTime || '99:99').localeCompare(b.exactTime || '99:99'));
             const panelEl = document.querySelector('.today-panel');
+            const activeVac = getActiveVacation(todayStr);
+            if (activeVac) {
+                if (panelEl) panelEl.classList.remove('today-panel-active-glow');
+                box.innerHTML = `<div class="today-empty-box">
+                    🏖️ لا توجد دروس اليوم — <strong>${escHtml(activeVac.name)}</strong> (حتى ${activeVac.endDate})<br>
+                    <small><a href="javascript:void(0)" onclick="openGroupsView()" style="color:var(--primary);font-weight:800;">📚 تصفح المجموعات يدوياً</a> &nbsp;|&nbsp; <a href="javascript:void(0)" onclick="openVacationModal()" style="color:#b45309;font-weight:800;">⚙️ إعدادات الإجازة</a></small>
+                </div>`;
+                return;
+            }
+            const todaysGroups = groups.filter(g => g.days && g.days[0] === todayName).sort((a, b) => (a.exactTime || '99:99').localeCompare(b.exactTime || '99:99'));
             if (panelEl) panelEl.classList.toggle('today-panel-active-glow', todaysGroups.length > 0);
             if (!todaysGroups.length) {
                 box.innerHTML = `<div class="today-empty-box">لا توجد مجموعات مجدولة ليوم <strong>${todayName}</strong> 🏖️<br><small><a href="javascript:void(0)" onclick="openGroupsView()" style="color:var(--primary);font-weight:800;">📚 افتح صفحة المجموعات</a></small></div>`;
@@ -3777,7 +4255,7 @@
 
         /* ===== نظام زر الرجوع (Back) للهاتف ===== */
         const MODAL_PRIORITY_ORDER = [
-            'faceRegisterModal', 'faceAttendanceModal', 'alarmModal', 'monthlyPayModal',
+            'vacationModal', 'faceRegisterModal', 'faceAttendanceModal', 'alarmModal', 'monthlyPayModal',
             'studentFormModal', 'moveStudentsModal', 'groupFormModal', 'studentArchiveModal',
             'scheduleModal', 'todayModal', 'financeModal', 'leaderboardModal', 'safeExitModal'
         ];
