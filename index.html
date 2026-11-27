@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>سجل الطلاب الذكي - الإصدار 11.9 (Face ID)</title>
+    <title>سجل الطلاب الذكي</title>
 
     <meta name="theme-color" content="#1d4ed8">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1293,7 +1293,7 @@ body.dark-mode{--sd-in:#1e293b}
             </button>
             <div class="brand-stack-v104">
                 <h1>سجل الطلاب الذكي</h1>
-                <span class="version-pill version-v104">الإصدار 11.9 • Face ID</span>
+                <span class="version-pill version-v104" id="appVersionPill">الإصدار 12.0</span>
             </div>
             <button type="button" class="logo-menu-btn logo-clean-cap dark-toggle-btn" id="darkModeBtn" onclick="toggleDarkMode()" title="تبديل الوضع الليلي / النهاري" aria-label="الوضع الليلي">
                 <span class="logo-circle" id="darkModeIcon">🌙</span>
@@ -1438,7 +1438,6 @@ body.dark-mode{--sd-in:#1e293b}
                 <div class="toolbar-buttons">
                     <button class="btn btn-purple" onclick="openFaceAttendanceModal()">📸 تحضير بالوجه</button>
                     <button class="btn btn-primary" onclick="openStudentFormModal()">➕ إضافة طالب</button>
-                    <button class="btn btn-success" onclick="openGroupMsgModal()">📨 رسالة للكل</button>
                     <button class="btn btn-teal" onclick="openBulkMoveModal()">↔️ نقل (<span id="selectedCount">0</span>)</button>
                     <button class="btn btn-warning" onclick="openLeaderboardModal()">🏆 الشرف</button>
                     <button class="btn btn-dark" onclick="advanceToNextSession()">🔄 إنهاء الحصة</button>
@@ -1855,25 +1854,6 @@ body.dark-mode{--sd-in:#1e293b}
         </div>
     </div>
 
-    <div id="groupMsgModal" class="modal">
-        <div class="modal-card">
-            <button class="modal-close" onclick="closeModal('groupMsgModal')">&times;</button>
-            <h3 class="modal-title" style="color:var(--primary);">📨 رسالة لأولياء المجموعة</h3>
-            <p class="modal-sub" id="gmSub"></p>
-            <div class="form-group"><label>النموذج</label><select id="gmTpl" class="form-control" onchange="gmPickTemplate()"></select></div>
-            <div class="form-group"><label>نص الرسالة (تقدر تعدله)</label><textarea id="gmText" class="form-control" rows="5" oninput="gmRender()"></textarea>
-              <small style="color:var(--muted);font-weight:700">المتغيرات: {اسم} {حصة} {مجموعة} {معلم} {حضور} {درجات} {مجموع}</small></div>
-            <div class="sd-btns" style="margin-bottom:8px"><button type="button" class="btn btn-sm btn-primary" onclick="gmSaveTemplate()">💾 احفظ التعديل على النموذج</button><button type="button" class="btn btn-sm btn-ghost" onclick="gmResetTemplate()">↩ رجّع الأصلي</button></div>
-            <div class="form-group"><label>لمين؟</label><select id="gmAud" class="form-control" onchange="gmRender()"><option value="all">كل الطلاب</option><option value="absent">الغائبين في الحصة الحالية</option><option value="present">الحاضرين في الحصة الحالية</option><option value="due">المطلوب منهم دفع</option></select></div>
-            <div class="sd-box" id="gmGroupBox"><div class="sd-lbl" style="color:var(--dark)">📣 جروب واتساب المجموعة (رسالة واحدة للكل)</div>
-              <input id="gmWaLink" class="form-control" placeholder="https://chat.whatsapp.com/..." dir="ltr" style="margin:6px 0">
-              <div class="sd-btns"><button type="button" class="btn btn-sm btn-ghost" onclick="gmSaveLink()">💾 احفظ لينك الجروب</button><button type="button" class="btn btn-sm btn-success" onclick="gmCopyOpen()">📋 انسخ الرسالة وافتح الجروب</button><button type="button" class="btn btn-sm btn-primary" onclick="gmShare()">↗ اختار الجروب من واتساب</button></div>
-              <div class="sd-note" id="gmGroupMsg"></div>
-              <p class="sd-note">الرسالة هنا واحدة للجروب كله (من غير {اسم} و{درجات}). واتساب مبيسمحش نكتب الرسالة جوه جروب معيّن أوتوماتيك: "انسخ وافتح" بينسخ الرسالة ويفتح الجروب وإنت بتلزق (Paste) وتبعت. "اختار الجروب" بيفتح واتساب برسالة جاهزة وإنت بتختار الجروب.</p></div>
-            <div id="gmList"></div>
-            <p class="sd-note">كل رسالة بتتفتح في واتساب لوحدها وإنت اللي بتدوس إرسال. مفيش حاجة بتتبعت تلقائي.</p>
-        </div>
-    </div>
     <div id="todayModal" class="modal">
         <div class="modal-card today-modal-glow">
             <button class="modal-close" onclick="closeModal('todayModal')">&times;</button>
@@ -1984,6 +1964,10 @@ body.dark-mode{--sd-in:#1e293b}
         /* =====================================================================
            سجل الطلاب الذكي - الإصدار 11.9 (مدمج به نظام التحضير بالوجه Face ID)
            ===================================================================== */
+        const APP_VERSION = '12.3';
+        const APP_VERSION_NOTE = 'لوحة الطالب • درجات • حفظ أسرع • رجوع من لوحة الطالب';
+        document.title = 'سجل الطلاب الذكي - الإصدار ' + APP_VERSION;
+        (function () { const p = document.getElementById('appVersionPill'); if (p) { p.textContent = 'الإصدار ' + APP_VERSION + ' • جديد'; p.title = APP_VERSION_NOTE; } })();
         const WEEK_DAYS = ['السبت', 'الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'];
         const MONTHLY_LIMIT = 4;
         const BACKUP_PENDING_KEY = 'smart_student_record_backup_pending_v1';
@@ -2015,11 +1999,28 @@ body.dark-mode{--sd-in:#1e293b}
             try { localStorage.setItem(BACKUP_PENDING_KEY, '1'); } catch (e) {}
         }
 
-        function saveStorage() {
-            localStorage.setItem('groups_v3', JSON.stringify(groups));
-            localStorage.setItem('students_v3', JSON.stringify(students));
-            markBackupPending();
+        /* 12.1: الحفظ مؤجل 300ms ويتكتب مرة واحدة، ويتفرّغ فوراً عند قفل/إخفاء الصفحة */
+        let storageDirty = false, storageTimer = null, storageErrShown = false;
+        function flushStorage() {
+            if (storageTimer) { clearTimeout(storageTimer); storageTimer = null; }
+            if (!storageDirty) return;
+            storageDirty = false;
+            try {
+                localStorage.setItem('groups_v3', JSON.stringify(groups));
+                localStorage.setItem('students_v3', JSON.stringify(students));
+                markBackupPending();
+            } catch (e) {
+                storageDirty = true;
+                if (!storageErrShown) { storageErrShown = true; alert('⚠️ تعذّر حفظ البيانات (مساحة التخزين ممتلئة غالباً). صدّر نسخة احتياطية الآن.'); }
+            }
         }
+        function saveStorage() {
+            storageDirty = true;
+            if (!storageTimer) storageTimer = setTimeout(flushStorage, 300);
+        }
+        window.addEventListener('pagehide', flushStorage);
+        window.addEventListener('beforeunload', flushStorage);
+        document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flushStorage(); });
 
         function escHtml(str) {
             return String(str ?? '').replace(/[&<>"']/g, ch => ({
@@ -2841,9 +2842,10 @@ body.dark-mode{--sd-in:#1e293b}
             activeGroupId = groupId;
             selectedStudentIds.clear();
             const cur = group.currentSession || 1;
+            const beforeDates = JSON.stringify(group.sessionDates || []) + '|' + group.date;
             ensureGroupDatesUpTo(group, cur + 4);
             group.date = group.sessionDates[cur - 1] || localDateString();
-            saveStorage();
+            if (JSON.stringify(group.sessionDates || []) + '|' + group.date !== beforeDates) saveStorage();
 
             document.getElementById('dashboardView').style.display = 'none';
             document.getElementById('groupView').style.display = 'block';
@@ -3659,62 +3661,6 @@ body.dark-mode{--sd-in:#1e293b}
             st.exams=o;saveStorage();openStudentDashModal(sdCurId)}
 
 
-        /* === MSG-PROTO: رسالة للكل عن طريق واتساب (إضافة فقط) === */
-        const GM_DEFAULTS={
-            att:{n:'تقرير الحصة',t:'السلام عليكم، تقرير {اسم} في حصة {حصة} ({مجموعة}): {حضور}.\nمع تحيات {معلم}.'},
-            abs:{n:'غياب',t:'السلام عليكم، نحيطكم علمًا بأن {اسم} تغيّب عن حصة {حصة} ({مجموعة}). برجاء المتابعة.\n{معلم}'},
-            pay:{n:'تذكير بالدفع',t:'السلام عليكم، تذكير لطيف بسداد مصروفات {اسم} ({مجموعة}). شكرًا لتعاونكم.\n{معلم}'},
-            mark:{n:'الدرجات',t:'السلام عليكم، درجات {اسم} في حصة {حصة}: {درجات} (المجموع {مجموع} من 25).\n{معلم}'},
-            free:{n:'رسالة حرّة',t:'السلام عليكم، '}
-        };
-        const GM_KEY='msg_templates_v1';
-        let gmSent={};
-        function gmTemplates(){let o={};try{o=JSON.parse(localStorage.getItem(GM_KEY)||'{}')||{}}catch(e){}return o}
-        function gmText(k){const o=gmTemplates();return typeof o[k]==='string'?o[k]:GM_DEFAULTS[k].t}
-        function openGroupMsgModal(){
-            const g=groups.find(x=>x.id===activeGroupId); if(!g) return; gmSent={};
-            document.getElementById('gmSub').innerText=`${g.grade} - ${g.name}`;
-            document.getElementById('gmTpl').innerHTML=Object.keys(GM_DEFAULTS).map(k=>`<option value="${k}">${GM_DEFAULTS[k].n}</option>`).join('');
-            document.getElementById('gmWaLink').value=g.waGroupLink||'';document.getElementById('gmGroupMsg').innerText='';gmPickTemplate(); openModalById('groupMsgModal');
-        }
-        function gmPickTemplate(){document.getElementById('gmText').value=gmText(document.getElementById('gmTpl').value);gmRender()}
-        function gmSaveTemplate(){const k=document.getElementById('gmTpl').value;const o=gmTemplates();o[k]=document.getElementById('gmText').value;try{localStorage.setItem(GM_KEY,JSON.stringify(o));markBackupPending()}catch(e){}alert('اتحفظ النموذج.')}
-        function gmResetTemplate(){const k=document.getElementById('gmTpl').value;const o=gmTemplates();delete o[k];try{localStorage.setItem(GM_KEY,JSON.stringify(o))}catch(e){}gmPickTemplate()}
-        function gmFill(tpl,st,g){
-            const cur=g.currentSession||1;const isAtt=Boolean(st.attendanceSessions&&st.attendanceSessions[cur-1]);
-            const m=(st.marks&&st.marks[cur-1])||null;
-            const gr=!m?'لسه مفيش درجات':(m.abs?'غائب':`الواجب ${m.hw??'-'}، الكراسة ${m.nb??'-'}، التقييم ${m.ev??'-'}، السلوك ${m.bh??'-'}`);
-            const tot=(m&&!m.abs)?['hw','nb','ev','bh'].reduce((a,k)=>a+(typeof m[k]==='number'?m[k]:0),0):'-';
-            return tpl.replace(/\{اسم\}/g,st.name).replace(/\{حصة\}/g,cur).replace(/\{مجموعة\}/g,g.name).replace(/\{معلم\}/g,getTeacherName()).replace(/\{حضور\}/g,isAtt?'حضر':'لم يحضر').replace(/\{درجات\}/g,gr).replace(/\{مجموع\}/g,tot);
-        }
-
-        function gmGroupText(g){return document.getElementById('gmText').value.replace(/\{اسم\}/g,'أولياء الأمور الكرام').replace(/\{حصة\}/g,g.currentSession||1).replace(/\{مجموعة\}/g,g.name).replace(/\{معلم\}/g,getTeacherName()).replace(/\{(حضور|درجات|مجموع)\}/g,'')}
-        function gmSaveLink(){const g=groups.find(x=>x.id===activeGroupId);if(!g)return;const v=document.getElementById('gmWaLink').value.trim();
-            if(v&&!/^https:\/\/chat\.whatsapp\.com\/[A-Za-z0-9_-]+/.test(v)){alert('اللينك لازم يبدأ بـ https://chat.whatsapp.com/');return}
-            if(v)g.waGroupLink=v;else delete g.waGroupLink;saveStorage();document.getElementById('gmGroupMsg').innerText=v?'✔ اتحفظ لينك الجروب':'اتمسح لينك الجروب'}
-        async function gmCopyText(t){try{await navigator.clipboard.writeText(t);return true}catch(e){try{const a=document.createElement('textarea');a.value=t;a.style.position='fixed';a.style.opacity='0';document.body.appendChild(a);a.select();const ok=document.execCommand('copy');a.remove();return ok}catch(e2){return false}}}
-        async function gmCopyOpen(){const g=groups.find(x=>x.id===activeGroupId);if(!g)return;const link=(g.waGroupLink||'').trim();
-            if(!link){document.getElementById('gmGroupMsg').innerText='احفظ لينك الجروب الأول.';return}
-            const ok=await gmCopyText(gmGroupText(g));
-            document.getElementById('gmGroupMsg').innerText=ok?'✔ الرسالة اتنسخت. هيفتح الجروب: الزق الرسالة (Paste) وابعت.':'⚠ النسخ ما نفعش، انسخ النص من الخانة اللي فوق بإيدك.';
-            window.open(link,'_blank')}
-        function gmShare(){const g=groups.find(x=>x.id===activeGroupId);if(!g)return;window.open('https://wa.me/?text='+encodeURIComponent(gmGroupText(g)),'_blank')}
-
-        function gmRender(){
-            const g=groups.find(x=>x.id===activeGroupId); if(!g) return;
-            const cur=g.currentSession||1,aud=document.getElementById('gmAud').value,tpl=document.getElementById('gmText').value;
-            const list=students.filter(s=>s.groupId===g.id).filter(s=>{const a=Boolean(s.attendanceSessions&&s.attendanceSessions[cur-1]);return aud==='all'||(aud==='absent'&&!a)||(aud==='present'&&a)||(aud==='due'&&isStudentPaymentDue(s,cur))});
-            document.getElementById('gmList').innerHTML=!list.length?'<p style="text-align:center;color:var(--muted)">مفيش طلاب في الاختيار ده.</p>':list.map(s=>{
-                const ph=(s.phone||'').replace(/[^0-9]/g,'');const msg=gmFill(tpl,s,g);
-                return `<div class="sd-box"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong>${escHtml(s.name)}</strong>${ph?`<button type="button" class="btn btn-sm ${gmSent[s.id]?'btn-ghost':'btn-success'}" onclick="gmOpen('${s.id}')">${gmSent[s.id]?'✔ اتفتحت':'📲 افتح واتساب'}</button>`:'<span class="warn" style="color:#dc2626;font-weight:800">مفيش رقم</span>'}</div><div class="sd-note" style="white-space:pre-wrap;color:var(--text)">${escHtml(msg)}</div></div>`}).join('');
-        }
-        function gmOpen(id){
-            const g=groups.find(x=>x.id===activeGroupId),s=students.find(x=>x.id===id);if(!g||!s)return;
-            let ph=(s.phone||'').replace(/[^0-9]/g,'');if(!ph)return;if(ph.startsWith('01')&&ph.length===11)ph='2'+ph;
-            const msg=gmFill(document.getElementById('gmText').value,s,g);gmSent[id]=true;
-            window.open(`https://wa.me/${ph}?text=${encodeURIComponent(msg)}`,'_blank');gmRender();
-        }
-
         function renderStudentMiniIcons(studentId) {
             const stu = students.find(s => s.id === studentId);
             const hasFace = Boolean(stu && Array.isArray(stu.faceDescriptor) && stu.faceDescriptor.length > 0);
@@ -3832,7 +3778,7 @@ body.dark-mode{--sd-in:#1e293b}
         }
 
         function makeBackupObject() {
-            return { format: BACKUP_FORMAT, backupVersion: 3, appVersion: '11.9', createdAt: new Date().toISOString(), teacherName: getTeacherName(), monthlyCutoffDate: getMonthlyCutoffDate(), vacations, groups, students, msgTemplates: gmTemplates() };
+            return { format: BACKUP_FORMAT, backupVersion: 3, appVersion: APP_VERSION, createdAt: new Date().toISOString(), teacherName: getTeacherName(), monthlyCutoffDate: getMonthlyCutoffDate(), vacations, groups, students };
         }
         function downloadJSON(obj, prefix) {
             const blob = new Blob([JSON.stringify(obj, null, 2)], { type: 'application/json;charset=utf-8' });
@@ -3842,6 +3788,7 @@ body.dark-mode{--sd-in:#1e293b}
             setTimeout(() => URL.revokeObjectURL(url), 1500);
         }
         function exportData() {
+            flushStorage();
             downloadJSON(makeBackupObject(), 'SmartStudentRecord_Backup');
             try { localStorage.setItem(BACKUP_PENDING_KEY, '0'); } catch (e) {}
             const st = document.getElementById('safeExitStatus');
@@ -3859,7 +3806,6 @@ body.dark-mode{--sd-in:#1e293b}
                     if (!confirm(`استرجاع (${data.groups.length}) مجموعة و (${data.students.length}) طالب؟`)) { input.value = ''; return; }
                     downloadJSON(makeBackupObject(), 'SmartStudentRecord_BeforeRestore');
                     groups = data.groups; students = data.students;
-                    if (data.msgTemplates && typeof data.msgTemplates === 'object') { try { localStorage.setItem('msg_templates_v1', JSON.stringify(data.msgTemplates)); } catch (e) {} }
                     if (typeof data.teacherName === 'string' && data.teacherName.trim()) localStorage.setItem('teacher_name_v1', data.teacherName.trim());
                     if (typeof data.monthlyCutoffDate === 'string' && parseLocalDate(data.monthlyCutoffDate)) setMonthlyCutoffDate(data.monthlyCutoffDate);
                     if (Array.isArray(data.vacations)) { vacations = data.vacations; saveVacations(); }
@@ -3870,7 +3816,7 @@ body.dark-mode{--sd-in:#1e293b}
             };
             reader.readAsText(file);
         }
-        function openSafeExitModal() { document.getElementById('safeExitStatus').innerText = ''; openModalById('safeExitModal'); }
+        function openSafeExitModal() { flushStorage(); document.getElementById('safeExitStatus').innerText = ''; openModalById('safeExitModal'); }
 
         function getStudentPaidTotal(student, group) {
             const fee = group ? (Number(group.fee) || 0) : 0;
@@ -4408,7 +4354,7 @@ body.dark-mode{--sd-in:#1e293b}
 
         /* ===== نظام زر الرجوع (Back) للهاتف ===== */
         const MODAL_PRIORITY_ORDER = [
-            'vacationModal', 'faceRegisterModal', 'faceAttendanceModal', 'alarmModal', 'monthlyPayModal',
+            'studentDashModal', 'vacationModal', 'faceRegisterModal', 'faceAttendanceModal', 'alarmModal', 'monthlyPayModal',
             'studentFormModal', 'moveStudentsModal', 'groupFormModal', 'studentArchiveModal',
             'scheduleModal', 'todayModal', 'financeModal', 'leaderboardModal', 'safeExitModal'
         ];
