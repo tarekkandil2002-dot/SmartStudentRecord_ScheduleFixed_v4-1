@@ -1264,7 +1264,24 @@
             .form-grid { grid-template-columns: 1fr; }
             .sched-days-grid { grid-template-columns: 1fr !important; }
         }
-    </style>
+    
+/* === DASH-PROTO: لوحة الطالب === */
+.s-ico-btn.ico-dash{background:#fffbeb;border-color:#f1d98a;color:#92400e}
+.sd-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px 4px;text-align:center;margin:10px 0}
+.sd-ring{width:68px;height:68px;border-radius:50%;margin:auto;display:flex;align-items:center;justify-content:center;position:relative}
+.sd-ring i{position:absolute;inset:7px;border-radius:50%;background:var(--sd-in,#fff)}
+.sd-ring b{position:relative;font-weight:900;font-size:15px;color:var(--dark)}
+.sd-lbl{font-weight:800;font-size:12.5px;color:var(--muted);margin-top:4px}
+.sd-ar{font-weight:900;font-size:12px}.sd-up{color:#16a34a}.sd-dn{color:#dc2626}.sd-eq{color:#64748b}
+.sd-strip{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}.sd-strip u{width:16px;height:16px;border-radius:5px;display:inline-block}
+.sd-note{font-size:12px;color:var(--muted);font-weight:700;margin-top:8px}
+body.dark-mode{--sd-in:#1e293b}
+.sd-box{border:1px solid rgba(148,163,184,.4);border-radius:12px;padding:10px;margin:10px 0}
+.sd-ins{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:8px 0}
+.sd-in{display:flex;flex-direction:column;font-size:12.5px;font-weight:800;color:var(--muted);gap:3px}
+.sd-in input{padding:8px;border-radius:9px;border:1px solid rgba(148,163,184,.5);font-size:16px;font-weight:900;color:#2563eb;background:transparent;width:100%}
+.sd-btns{display:flex;gap:6px;flex-wrap:wrap}.sd-tot{color:#dc2626;font-weight:900;margin-inline-start:8px}
+</style>
 </head>
 
 <body>
@@ -1827,6 +1844,15 @@
     </div>
 
     <!-- ===== Modal: Today's Schedule ===== -->
+
+    <div id="studentDashModal" class="modal">
+        <div class="modal-card">
+            <button class="modal-close" onclick="closeModal('studentDashModal')">&times;</button>
+            <h3 class="modal-title" id="sdTitle" style="color:var(--primary);">📊 لوحة الطالب</h3>
+            <p class="modal-sub" id="sdSub"></p>
+            <div id="sdBody"></div>
+        </div>
+    </div>
     <div id="todayModal" class="modal">
         <div class="modal-card today-modal-glow">
             <button class="modal-close" onclick="closeModal('todayModal')">&times;</button>
@@ -3564,11 +3590,59 @@
             return hasFace ? '<span class="face-saved-mark" title="صورة وبصمة الوجه محفوظة">📸✓</span>' : '';
         }
 
+
+        /* === DASH-PROTO v2: لوحة الطالب + خانات الإدخال (إضافة فقط: student.marks / student.exams) === */
+        const SD_FIELDS=[{k:'hw',n:'الواجب',max:5,c:'#d4a017'},{k:'nb',n:'الكراسة',max:5,c:'#0d9488'},{k:'ev',n:'التقييم',max:10,c:'#2563eb'},{k:'bh',n:'السلوك',max:5,c:'#7c3aed'}];
+        let sdCurId=null;
+        function sdMean(a){return a.length?a.reduce((x,y)=>x+y,0)/a.length:null}
+        function sdArrow(cur,prev){if(cur===null||prev===null)return '<div class="sd-ar">&nbsp;</div>';const d=Math.round(cur-prev);return d>0?`<div class="sd-ar sd-up">▲ ${d}</div>`:d<0?`<div class="sd-ar sd-dn">▼ ${-d}</div>`:'<div class="sd-ar sd-eq">＝</div>'}
+        function sdRing(label,val,prev,color){const v=val===null?null:Math.round(val);return `<div><div class="sd-ring" style="background:conic-gradient(${color} ${v===null?0:v}%,rgba(148,163,184,.35) 0)"><i></i><b>${v===null?'—':v+'%'}</b></div><div class="sd-lbl">${label}</div>${sdArrow(val,prev)}</div>`}
+        function sdMarks(st){return (st.marks&&typeof st.marks==='object')?st.marks:{}}
+        function sdSeries(st,k,max){const m=sdMarks(st);const idx=Object.keys(m).map(Number).sort((a,b)=>a-b);const v=idx.map(i=>m[i]).filter(x=>x&&!x.abs&&typeof x[k]==='number').map(x=>x[k]/max*100);return {cur:sdMean(v.slice(-MONTHLY_LIMIT)),prev:sdMean(v.slice(-2*MONTHLY_LIMIT,-MONTHLY_LIMIT))}}
+        function openStudentDashModal(studentId){
+            const st=students.find(x=>x.id===studentId); if(!st) return; sdCurId=studentId;
+            const g=groups.find(x=>x.id===st.groupId); const cur=g?(g.currentSession||1):1;
+            const att=[];for(let i=0;i<cur;i++)att.push(Boolean(st.attendanceSessions&&st.attendanceSessions[i]));
+            const pct=a=>a.length?a.filter(Boolean).length/a.length*100:null;
+            const last=att.slice(-MONTHLY_LIMIT),prev=att.slice(-2*MONTHLY_LIMIT,-MONTHLY_LIMIT);
+            const S={};SD_FIELDS.forEach(f=>S[f.k]=sdSeries(st,f.k,f.max));
+            const ex=st.exams||{};
+            const m=sdMarks(st)[cur-1]||{};
+            document.getElementById('sdTitle').innerText='📊 '+st.name;
+            document.getElementById('sdSub').innerText=g?`${g.grade} - ${g.name} · حصة ${cur}`:'';
+            const inputs=SD_FIELDS.map(f=>`<label class="sd-in"><span>${f.n} (${f.max})</span><input id="sdi_${f.k}" type="number" inputmode="numeric" min="0" max="${f.max}" value="${m.abs?'':(typeof m[f.k]==='number'?m[f.k]:'')}" ${m.abs?'disabled':''}></label>`).join('');
+            const tot=m.abs?null:SD_FIELDS.reduce((a,f)=>a+(typeof m[f.k]==='number'?m[f.k]:0),0);
+            document.getElementById('sdBody').innerHTML=`<div class="sd-grid">
+              ${sdRing('الحضور',last.length?pct(att):null,prev.length?pct(prev):null,'#16a34a')}
+              ${SD_FIELDS.map(f=>sdRing(f.n,S[f.k].cur,S[f.k].prev,f.c)).join('')}
+              <div><div class="sd-ring" style="background:rgba(212,160,23,.25)"><b>${st.points||0}⭐</b></div><div class="sd-lbl">النقاط</div><div class="sd-ar">&nbsp;</div></div></div>
+              <div class="sd-box"><div class="sd-lbl" style="color:var(--dark)">درجات حصة ${cur} <span class="sd-tot">${tot===null?(m.abs?'غائب':'—'):('المجموع '+tot+' / 25')}</span></div>
+              <div class="sd-ins">${inputs}</div>
+              <div class="sd-btns"><button type="button" class="btn btn-sm btn-primary" onclick="sdSave(${cur-1})">💾 حفظ</button><button type="button" class="btn btn-sm btn-ghost" onclick="sdAbsent(${cur-1})">غ غائب</button><button type="button" class="btn btn-sm btn-ghost" onclick="sdClear(${cur-1})">↩ مسح درجات الحصة</button></div></div>
+              <div class="sd-box"><div class="sd-lbl" style="color:var(--dark)">الاختبارات (من 100، اختياري)</div>
+              <div class="sd-ins"><label class="sd-in"><span>اختبار الشهر</span><input id="sdx_month" type="number" min="0" max="100" value="${typeof ex.month==='number'?ex.month:''}"></label><label class="sd-in"><span>نصف العام</span><input id="sdx_half" type="number" min="0" max="100" value="${typeof ex.half==='number'?ex.half:''}"></label></div>
+              <div class="sd-btns"><button type="button" class="btn btn-sm btn-primary" onclick="sdSaveExams()">💾 حفظ الاختبارات</button></div></div>
+              <div class="sd-lbl" style="text-align:right">الحصص (أخضر حضر / أحمر غاب):</div>
+              <div class="sd-strip">${att.map(a=>`<u style="background:${a?'#16a34a':'#dc2626'}"></u>`).join('')||'—'}</div>`;
+            openModalById('studentDashModal');
+        }
+        function sdGet(){return students.find(x=>x.id===sdCurId)}
+        function sdSave(i){const st=sdGet();if(!st)return;const rec={};let bad=null;
+            SD_FIELDS.forEach(f=>{const v=document.getElementById('sdi_'+f.k).value.trim();if(v==='')return;const n=Number(v);if(!Number.isFinite(n)||n<0||n>f.max)bad=f.n;else rec[f.k]=n});
+            if(bad){alert('رقم غير صحيح في: '+bad);return}
+            if(!Object.keys(rec).length){alert('اكتب درجة واحدة على الأقل.');return}
+            if(!st.marks||typeof st.marks!=='object')st.marks={};st.marks[i]=rec;saveStorage();openStudentDashModal(sdCurId)}
+        function sdAbsent(i){const st=sdGet();if(!st)return;if(!st.marks||typeof st.marks!=='object')st.marks={};st.marks[i]={abs:true};saveStorage();openStudentDashModal(sdCurId)}
+        function sdClear(i){const st=sdGet();if(!st||!st.marks)return;delete st.marks[i];saveStorage();openStudentDashModal(sdCurId)}
+        function sdSaveExams(){const st=sdGet();if(!st)return;const o={};for(const[k,id]of[['month','sdx_month'],['half','sdx_half']]){const v=document.getElementById(id).value.trim();if(v==='')continue;const n=Number(v);if(!Number.isFinite(n)||n<0||n>100){alert('الاختبار من 0 إلى 100');return}o[k]=n}
+            st.exams=o;saveStorage();openStudentDashModal(sdCurId)}
+
         function renderStudentMiniIcons(studentId) {
             const stu = students.find(s => s.id === studentId);
             const hasFace = Boolean(stu && Array.isArray(stu.faceDescriptor) && stu.faceDescriptor.length > 0);
             return `<div class="student-mini-icons">
                 <button type="button" class="s-ico-btn ${hasFace ? 'ico-face-ok' : 'ico-face'}" onclick="openFaceRegisterModal('${studentId}')" title="${hasFace ? 'بصمة الوجه مسجلة (اضغط للتحديث)' : 'تسجيل بصمة الوجه'}" aria-label="بصمة الوجه">📸</button>
+                <button type="button" class="s-ico-btn ico-dash" onclick="openStudentDashModal('${studentId}')" title="لوحة الطالب">📊</button>
                 <button type="button" class="s-ico-btn ico-archive" onclick="openStudentArchiveModal('${studentId}')" title="الأرشيف">📂</button>
                 <button type="button" class="s-ico-btn ico-wa" onclick="sendWhatsApp('${studentId}')" title="واتساب">
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="var(--whatsapp)"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
@@ -4353,3 +4427,4 @@
     </script>
 </body>
 </html>
+
