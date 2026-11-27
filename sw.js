@@ -1,5 +1,5 @@
 // Service Worker - سجل الطلاب الذكي (الإصدار 11.9 + Face ID Offline)
-const CACHE_NAME = 'smart-student-record-v11.9-faceid';
+const CACHE_NAME = 'smart-student-record-v12.5-rail';
 
 const CORE_ASSETS = [
   './',
